@@ -74,7 +74,7 @@ TBD;
 | LOG IN user                            | POST   | /api/v1/auth/login                 | { email, password } | Public         |
 | GET logged in user                     | GET    | /api/v1/auth/me                    |                     | Private        |
 | See profile                            | GET    | /api/v1/profile                    |                     | Private        |
-| Edit profile                           | PUT    | /api/v1/profile/edit               |                     | Private        |
+| Edit profile                           | PUT    | /api/v1/profile/edit               | TBD                 | Private        |
 | Get other user profile                 | GET    | /api/v1/profile/:userId            |                     | Private        |
 | GET projects                           | GET    | /api/v1/projects                   |                     | Public         |
 | GET one project                        | GET    | /api/v1/projects/:projectId        |                     | Public         |
