@@ -29,7 +29,7 @@ const projectSchema = new Schema(
       required: [true, "Please add the project description."],
     },
     industry: {
-      type: String,
+      type: [String],
       enum: [
         "All",
         "Agriculture",
@@ -47,6 +47,8 @@ const projectSchema = new Schema(
         "Digital mark",
         "IT/Tech",
         "Electronics",
+				"Education",
+				"Food and beverage",
         "Other",
       ],
       required: [true, "Please select the industries your work with."],
@@ -64,11 +66,11 @@ const projectSchema = new Schema(
       ref: "User",
       required: true,
     },
-    investors: {
+    investors: [{
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
-    },
+    }],
   },
   {
     timestamps: true,
