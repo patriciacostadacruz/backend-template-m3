@@ -64,6 +64,7 @@ const userSchema = new Schema(
         "Electronics",
         "Other"
       ],
+      required: [true, "Please select the industries your work with."]
     },
     bio: {
       type: String,
