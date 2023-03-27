@@ -41,4 +41,17 @@ router.get("/:projectId", isAuthenticated, async (req, res, next) => {
   }
 });
 
+// @desc    Deletes a project
+// @route   DELETE /projects/:projectId
+// @access  Private
+router.delete("/:projectId", async (req, res, next) => {
+  const {projectId} = req.params;
+  try {
+    const deletedProject = await Project.findByIdAndDelete(projectId);
+    res.status(201).json(deletedProject);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 module.exports = router;
