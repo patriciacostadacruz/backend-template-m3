@@ -39,8 +39,10 @@ router.get("/:userId", async (req, res, next) => {
     const otherUser = await User.findById(userId);
     const userReviews = await Review.find({personRated: userId});
     // queries for projects where the owner is the user and the ones where the user is in investors array - allows to retrieves projects for both investors and investees
-    const userProjects = await Project.find({ $or: [ { owner: userId }, { investors: { $contains: userId} }]});
-		res.status(200).json(otherUser);
+    const userProjects = await Project.find({
+      $or: [{ owner: userId }, { investors: userId }],
+    });
+		res.status(200).json(otherUser, userReviews, userProjects);
   } catch (error) {
     console.error(error);
   }

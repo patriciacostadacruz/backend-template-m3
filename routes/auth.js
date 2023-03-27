@@ -74,7 +74,7 @@ router.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
   // Check if email or password are provided as empty string 
   if (email === "" || password === "") {
-    res.status(400).json({ message: 'Please fill all the fields to login' });
+    res.status(400).json({ message: 'Please fill all the fields to login.' });
     return;
   }
   try {
@@ -103,7 +103,7 @@ router.post('/login', async (req, res, next) => {
         res.status(200).json({ authToken: authToken })
       } else {
         // If the password is not right, return an error
-        res.status(401).json({ success: false, message: 'Unable to authenticate user'})
+        res.status(401).json({ success: false, message: 'Unable to authenticate user.'})
       }
     }
   } catch (error) {
