@@ -22,10 +22,10 @@ router.post('/signup', async (req, res, next) => {
     bio,
     status } = req.body;
   // Check if email or password or name are provided as empty string 
-  if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
-    res.status(400).json({ message: 'Please fill all the fields to sign up.' });
-    return;
-  }
+  // if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
+  //   res.status(400).json({ message: 'Please fill all the fields to sign up.' });
+  //   return;
+  // }
   // Use regex to validate the email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
