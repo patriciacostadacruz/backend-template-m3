@@ -9,22 +9,33 @@ const saltRounds = 10;
 // @route   POST /api/v1/auth/signup
 // @access  Public
 router.post('/signup', async (req, res, next) => {
-  const { email, password, username } = req.body;
+  const {
+    firstName,
+    lastName,
+    image,
+    email,
+    password,
+    role,
+    linkedIn,
+    company,
+    industry,
+    bio,
+    status } = req.body;
   // Check if email or password or name are provided as empty string 
-  if (email === "" || password === "" || username === "") {
-    res.status(400).json({ message: 'Please fill all the fields to register' });
+  if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
+    res.status(400).json({ message: 'Please fill all the fields to sign up.' });
     return;
   }
   // Use regex to validate the email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
-    res.status(400).json({ message: 'Not a valid email format' });
+    res.status(400).json({ message: 'Not a valid email format.' });
     return;
   }
    // Use regex to validate the password format
   const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!passwordRegex.test(password)) {
-    res.status(400).json({ message: 'Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter' });
+    res.status(400).json({ message: 'Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.' });
     return;
   }
   try {
@@ -35,7 +46,19 @@ router.post('/signup', async (req, res, next) => {
     } else {
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
-      const newUser = await User.create({ email, hashedPassword, username });
+      const newUser = await User.create({
+        firstName,
+        lastName,
+        image,
+        email,
+        hashedPassword,
+        role,
+        linkedIn,
+        company,
+        industry,
+        bio,
+        status,
+      });
       res.status(201).json({ data: newUser });
     }
   } catch (error) {
