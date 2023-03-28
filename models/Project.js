@@ -69,7 +69,6 @@ const projectSchema = new Schema(
     investors: [{
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     }],
   },
   {

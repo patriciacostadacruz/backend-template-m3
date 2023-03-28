@@ -18,8 +18,19 @@ router.get("/", async (req, res, next) => {
 // @route   POST /projects
 // @access  Private
 router.post("/", async (req, res, next) => {
-  // add validations so that no empty field for required items is passed
-  // also add validations for field types
+  const {
+    title,
+    status,
+    location,
+    description,
+    industry,
+    fundingNeeded,
+    owner
+  } = req.body;
+  if (!title || !status || !location || !description || !industry || !fundingNeeded || !owner) {
+    res.status(400).json({ message: "Please fill all the fields to add a new project." });
+    return;
+  }
   try {
     const newProject = await Project.create(req.body);
     res.status(201).json(newProject);
@@ -46,6 +57,29 @@ router.get("/:projectId", async (req, res, next) => {
 // @access  Private
 router.put("/:projectId", async (req, res, next) => {
   const {projectId} = req.params;
+  const {
+    title,
+    status,
+    location,
+    description,
+    industry,
+    fundingNeeded,
+    owner,
+  } = req.body;
+  if (
+    !title ||
+    !status ||
+    !location ||
+    !description ||
+    !industry ||
+    !fundingNeeded ||
+    !owner
+  ) {
+    res
+      .status(400)
+      .json({ message: "Please fill all the fields to update this project." });
+    return;
+  }
   try {
     const response = await Project.findByIdAndUpdate(projectId, req.body, {new: true});
     res.status(204).json({message: "Project data updated successfully."});
