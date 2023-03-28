@@ -286,21 +286,21 @@ const messageSchema = new Schema(
 
 ## API endpoints and usage
 
-| Action                                 | Method | Endpoint                           | Req.body            | Private/Public |
-| -------------------------------------- | ------ | ---------------------------------- | ------------------- | -------------- |
-| SIGN UP user                           | POST   | /api/v1/auth/signup                | TBD                 | Public         |
-| LOG IN user                            | POST   | /api/v1/auth/login                 | { email, password } | Public         |
-| GET logged in user                     | GET    | /api/v1/auth/me                    |                     | Private        |
-| See profile                            | GET    | /api/v1/profile                    |                     | Private        |
-| Edit profile                           | PUT    | /api/v1/profile/edit               | TBD                 | Private        |
-| Get other user profile                 | GET    | /api/v1/profile/:userId            |                     | Private        |
-| GET projects                           | GET    | /api/v1/projects                   |                     | Public         |
-| GET one project                        | GET    | /api/v1/projects/:projectId        |                     | Public         |
-| POST project                           | POST   | /api/v1/projects/new               | TBD                 | Private        |
-| Edit project                           | PUT    | /api/v1/projects/edit/:projectId   | TBD                 | Private        |
-| Delete project                         | DELETE | /api/v1/projects/delete/:projectId |                     | Private        |
-| Sends new review                       | POST   | /api/v1/reviews/new                | TBD                 | Private        |
-| Retrieves all reviews added for a user | GET    | /api/v1/reviews/:userId            |                     | Private        |
+| Action                 | Method | Endpoint                           | Req.body            | Private/Public |
+| ---------------------- | ------ | ---------------------------------- | ------------------- | -------------- |
+| SIGN UP user           | POST   | /api/v1/auth/signup                | TBD                 | Public         |
+| LOG IN user            | POST   | /api/v1/auth/login                 | { email, password } | Public         |
+| GET logged in user     | GET    | /api/v1/auth/me                    |                     | Private        |
+| See profile            | GET    | /api/v1/profile                    |                     | Private        |
+| Edit profile           | PUT    | /api/v1/profile/edit               | TBD                 | Private        |
+| Get other user profile | GET    | /api/v1/profile/:userId            |                     | Private        |
+| GET projects           | GET    | /api/v1/projects                   |                     | Public         |
+| GET one project        | GET    | /api/v1/projects/:projectId        |                     | Public         |
+| POST project           | POST   | /api/v1/projects/new               | TBD                 | Private        |
+| Edit project           | PUT    | /api/v1/projects/edit/:projectId   | TBD                 | Private        |
+| Delete project         | DELETE | /api/v1/projects/delete/:projectId |                     | Private        |
+| Sends new review       | POST   | /api/v1/reviews/new                | TBD                 | Private        |
+| Private                |
 
 ---
 
