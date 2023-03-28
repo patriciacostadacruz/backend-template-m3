@@ -300,7 +300,6 @@ const messageSchema = new Schema(
 | Edit project           | PUT    | /api/v1/projects/edit/:projectId   | TBD                 | Private        |
 | Delete project         | DELETE | /api/v1/projects/delete/:projectId |                     | Private        |
 | Sends new review       | POST   | /api/v1/reviews/new                | TBD                 | Private        |
-| Private                |
 
 ---
 
