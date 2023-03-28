@@ -6,7 +6,7 @@ const { isAuthenticated, isAdmin } = require('../middlewares/jwt');
 const saltRounds = 10;
 
 // @desc    SIGN UP new user
-// @route   POST /api/v1/auth/signup
+// @route   POST /auth/signup
 // @access  Public
 router.post('/signup', async (req, res, next) => {
   const {
@@ -21,10 +21,10 @@ router.post('/signup', async (req, res, next) => {
     industry,
     bio,
     status } = req.body; 
-  // if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
-  //   res.status(400).json({ message: 'Please fill all the fields to sign up.' });
-  //   return;
-  // }
+  if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
+    res.status(400).json({ message: 'Please fill all the fields to sign up.' });
+    return;
+  }
   // Use regex to validate the email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
@@ -66,7 +66,7 @@ router.post('/signup', async (req, res, next) => {
 });
 
 // @desc    LOG IN user
-// @route   POST /api/v1/auth/login
+// @route   POST /auth/login
 // @access  Public
 router.post('/login', async (req, res, next) => { 
   console.log(req.headers);
@@ -87,6 +87,7 @@ router.post('/login', async (req, res, next) => {
       const passwordMatches = bcrypt.compareSync(password, userInDB.hashedPassword);
       if (passwordMatches) {
         // Let's create what we want to store in the jwt token
+        // update with data as per user model !!!!!!!!!!!
         const payload = {
           email: userInDB.email,
           username: userInDB.username,
@@ -111,7 +112,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // @desc    GET logged in user
-// @route   GET /api/v1/auth/me
+// @route   GET /auth/me
 // @access  Private
 router.get('/me', isAuthenticated, (req, res, next) => {
   // If JWT token is valid the payload gets decoded by the
