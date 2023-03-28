@@ -11,7 +11,7 @@ const projects = [
       "We are planning to open an organic farm-to-table restaurant in the heart of Los Angeles, serving locally-sourced, healthy, and delicious food. Our goal is to promote sustainable agriculture and healthy eating habits while providing a unique culinary experience.",
     industry: ["Food and beverage"],
     fundingNeeded: "seed",
-    owner: "641ee139a1ee3845c0587835",
+    owner: "64232827c5d190ee1a2dda9b",
     investors: [],
   },
   {
@@ -22,7 +22,7 @@ const projects = [
       "Our company produces eco-friendly cleaning products that are safe for people and the environment. We use only natural and biodegradable ingredients to create high-quality, effective cleaning solutions that are free from harmful chemicals.",
     industry: ["Consumer goods and retail", "Energy and environment"],
     fundingNeeded: "serie A, B or C",
-    owner: "641ee139a1ee3845c0587835",
+    owner: "64232827c5d190ee1a2dda9b",
     investors: [],
   },
   {
@@ -33,7 +33,7 @@ const projects = [
       "Our online language learning platform provides personalized language instruction for students around the world. Our innovative approach combines artificial intelligence and human expertise to create a seamless and effective language learning experience.",
     industry: ["Education", "IT/Tech"],
     fundingNeeded: "angel",
-    owner: "641ee139a1ee3845c0587835",
+    owner: "64232827c5d190ee1a2dda9b",
     investors: [],
   },
   {
@@ -44,7 +44,7 @@ const projects = [
       "Our company offers electric bike rental services for tourists and locals in Amsterdam. We aim to provide a sustainable and affordable transportation option for the city while promoting a healthy and active lifestyle.",
     industry: ["Transportation", "Energy and environment"],
     fundingNeeded: "pre-seed",
-    owner: "641ee139a1ee3845c0587835",
+    owner: "64232827c5d190ee1a2dda9b",
     investors: [],
   },
   {
@@ -55,7 +55,7 @@ const projects = [
       "Our fitness tracking app helps users track their workouts, set goals, and get personalized workout recommendations based on their fitness level and preferences. Our app uses machine learning algorithms to provide a customized and engaging fitness experience.",
     industry: ["Digital mark", "IT/Tech"],
     fundingNeeded: "serie A, B or C",
-    owner: "641ee139a1ee3845c0587835",
+    owner: "64232827c5d190ee1a2dda9b",
     investors: [],
   },
 ];

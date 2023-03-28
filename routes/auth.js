@@ -87,13 +87,19 @@ router.post('/login', async (req, res, next) => {
       const passwordMatches = bcrypt.compareSync(password, userInDB.hashedPassword);
       if (passwordMatches) {
         // Let's create what we want to store in the jwt token
-        // update with data as per user model !!!!!!!!!!!
         const payload = {
+          firstName: userInDB.firstName,
+          lastName: userInDB.lastName,
+          image: userInDB.image,
           email: userInDB.email,
-          username: userInDB.username,
           role: userInDB.role,
-          _id: userInDB._id
-        }
+          linkedIn: userInDB.linkedIn,
+          company: userInDB.company,
+          industry: userInDB.industry,
+          bio: userInDB.bio,
+          status: userInDB.status,
+          _id: userInDB._id,
+        };
         // Use the jwt middleware to create de token
         const authToken = jwt.sign(
           payload,
