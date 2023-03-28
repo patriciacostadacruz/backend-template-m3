@@ -45,7 +45,86 @@ npm run seed
 Users in the database have the following properties:
 
 ```js
-TBD;
+const userSchema = new Schema(
+  {
+    firstName: {
+      type: String,
+      required: [true, "Please write your first name."],
+    },
+    lastName: {
+      type: String,
+      required: [true, "Please write your last name."],
+    },
+    image: {
+      type: String,
+      default:
+        "https://www.atomos.co.uk/getmedia/ec2d2ef0-71ea-40b8-a76c-6eb00c0cc210/portrait_placeholder_6.png?width=600&height=600&ext=.png",
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: [true, "Please add your email."],
+      trim: true,
+    },
+    hashedPassword: {
+      type: String,
+      required: [true, "Please write your password."],
+    },
+    role: {
+      type: String,
+      enum: ["investee", "investor"],
+      default: "investee",
+      required: [true, "Please select your role."],
+    },
+    linkedIn: {
+      type: String,
+      unique: true,
+    },
+    company: {
+      type: String,
+      required: [
+        true,
+        "Please write the name of your company or the company for which you work.",
+      ],
+    },
+    industry: {
+      type: String,
+      enum: [
+        "All",
+        "Agriculture",
+        "Chems and materials",
+        "Communication",
+        "Construction",
+        "Consumer goods and retail",
+        "Consumer services",
+        "Energy and environment",
+        "Financial services",
+        "Infrastructures",
+        "Life science",
+        "Real estate",
+        "Transportation",
+        "Digital mark",
+        "IT/Tech",
+        "Electronics",
+        "Other",
+      ],
+      required: [true, "Please select the industries your work with."],
+    },
+    bio: {
+      type: String,
+      required: [true, "Please write your biography."],
+      maxLength: 600,
+    },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 ```
 
 ### Project
@@ -53,7 +132,82 @@ TBD;
 Projects in the database have the following properties:
 
 ```js
-TBD;
+const projectSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "Please write the title of your project."],
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: [
+        "active",
+        "initiation",
+        "planning",
+        "execution",
+        "on hold",
+        "closure stage",
+        "closed",
+      ],
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: [true, "Please add the project description."],
+    },
+    industry: {
+      type: [String],
+      enum: [
+        "All",
+        "Agriculture",
+        "Chems and materials",
+        "Communication",
+        "Construction",
+        "Consumer goods and retail",
+        "Consumer services",
+        "Energy and environment",
+        "Financial services",
+        "Infrastructures",
+        "Life science",
+        "Real estate",
+        "Transportation",
+        "Digital mark",
+        "IT/Tech",
+        "Electronics",
+        "Education",
+        "Food and beverage",
+        "Other",
+      ],
+      required: [true, "Please select the industries your work with."],
+    },
+    fundingNeeded: {
+      type: String,
+      required: [
+        true,
+        "Please select the type of funding you are looking for.",
+      ],
+      enum: ["pre-seed", "angel", "seed", "serie A, B or C", "none"],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    investors: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 ```
 
 ### Reviews
@@ -61,7 +215,71 @@ TBD;
 Reviews in the database have the following properties:
 
 ```js
-TBD;
+const reviewSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "Please add the review's title."],
+    },
+    rating: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 5,
+    },
+    comment: {
+      type: String,
+      required: [true, "Please add your comments."],
+      maxLength: 350,
+    },
+    personRating: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    personRated: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+```
+
+### Messages
+
+Messages in the database have the following properties:
+
+```js
+const messageSchema = new Schema(
+  {
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    recipient: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+      required: true,
+    },
+    message: {
+      type: String,
+      required: [true, "Please write your message."],
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 ```
 
 ---
