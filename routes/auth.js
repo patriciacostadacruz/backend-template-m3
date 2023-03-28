@@ -20,8 +20,7 @@ router.post('/signup', async (req, res, next) => {
     company,
     industry,
     bio,
-    status } = req.body;
-  // Check if email or password or name are provided as empty string 
+    status } = req.body; 
   // if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
   //   res.status(400).json({ message: 'Please fill all the fields to sign up.' });
   //   return;
