@@ -6,7 +6,7 @@ const Review = require("../models/Review");
 const projects = [
   {
     title: "Organic farm-to-table restaurant",
-    status: "Closed",
+    status: "closed",
     location: "Los Angeles",
     description:
       "We are planning to open an organic farm-to-table restaurant in the heart of Los Angeles, serving locally-sourced, healthy, and delicious food. Our goal is to promote sustainable agriculture and healthy eating habits while providing a unique culinary experience.",
