@@ -21,10 +21,27 @@ router.get("/", async (req, res, next) => {
 // @route   PUT /profile
 // @access  Private
 router.put("/", async (req, res, next) => {
-	// define userId
+  // define userId
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    company,
+    industry,
+    bio,
+    status,
+  } = req.body;
+  if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
+    res.status(400).json({ message: 'Please fill all the fields in order to update your profile.' });
+    return;
+  }
   try {
-    const response = await User.findByIdAndUpdate(userId, req.body, {new: true});
-		res.status(204).json({message: "Profile updated successfully."});
+    const response = await User.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
+    res.status(204).json({ message: "Profile updated successfully." });
   } catch (error) {
     console.error(error);
   }
