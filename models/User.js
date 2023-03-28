@@ -34,7 +34,6 @@ const userSchema = new Schema(
     },
     linkedIn: {
       type: String,
-      unique: true,
     },
     company: {
       type: String,
