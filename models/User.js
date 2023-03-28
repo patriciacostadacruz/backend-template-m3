@@ -43,7 +43,7 @@ const userSchema = new Schema(
       ],
     },
     industry: {
-      type: String,
+      type: [String],
       enum: [
         "All",
         "Agriculture",

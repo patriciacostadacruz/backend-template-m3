@@ -40,7 +40,7 @@ router.post('/signup', async (req, res, next) => {
   try {
     const userInDB = await User.findOne({ email });
     if (userInDB) {
-      res.status(400).json({ message: `User already exists with email ${email}` })
+      res.status(400).json({ message: `User already exists with email ${email}` });
       return;
     } else {
       const salt = bcrypt.genSaltSync(saltRounds);

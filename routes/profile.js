@@ -8,11 +8,11 @@ const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 // @route   GET /profile
 // @access  Private
 router.get("/", async (req, res, next) => {
-	const { userId } = req.payload;
+	const { _id: userId } = req.payload;
   try {
     const user = await User.findById(userId);
     const userReviews = await Review.find({ personRated: userId });
-    // need to test if it also retrieves projects where user is investor
+    // maybe separate projects owned and projects worked on as investors - TBD later
     const userProjects = await Project.find({
       $or: [{ owner: userId }, { investors: userId }],
     });
@@ -25,7 +25,7 @@ router.get("/", async (req, res, next) => {
 // @route   PUT /profile
 // @access  Private
 router.put("/", async (req, res, next) => {
-  const {userId} = req.payload;
+  const { _id: userId } = req.payload;
   const {
     firstName,
     lastName,
