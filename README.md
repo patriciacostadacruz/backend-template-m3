@@ -286,20 +286,21 @@ const messageSchema = new Schema(
 
 ## API endpoints and usage
 
-| Action                 | Method | Endpoint                    | Req.body            | Private/Public |
-| ---------------------- | ------ | --------------------------- | ------------------- | -------------- |
-| SIGN UP user           | POST   | /auth/signup                | TBD                 | Public         |
-| LOG IN user            | POST   | /auth/login                 | { email, password } | Public         |
-| GET logged in user     | GET    | /auth/me                    |                     | Private        |
-| See profile            | GET    | /profile                    |                     | Private        |
-| Edit profile           | PUT    | /profile/edit               | TBD                 | Private        |
-| Get other user profile | GET    | /profile/:userId            |                     | Private        |
-| GET projects           | GET    | /projects                   |                     | Public         |
-| GET one project        | GET    | /projects/:projectId        |                     | Public         |
-| POST project           | POST   | /projects/new               | TBD                 | Private        |
-| Edit project           | PUT    | /projects/edit/:projectId   | TBD                 | Private        |
-| Delete project         | DELETE | /projects/delete/:projectId |                     | Private        |
-| Sends new review       | POST   | /reviews/new                | TBD                 | Private        |
+| Action                 | Method | Endpoint                    | Req.body                                      | Private/Public |
+| ---------------------- | ------ | --------------------------- | --------------------------------------------- | -------------- |
+| SIGN UP user           | POST   | /auth/signup                | TBD                                           | Public         |
+| LOG IN user            | POST   | /auth/login                 | { email, password }                           | Public         |
+| GET logged in user     | GET    | /auth/me                    |                                               | Private        |
+| See profile            | GET    | /profile                    |                                               | Private        |
+| Edit profile           | PUT    | /profile/edit               | TBD                                           | Private        |
+| Edit password          | PUT    | /profile/password-edit      | {oldPassword, password, passwordConfirmation} | Private        |
+| Get other user profile | GET    | /profile/:userId            |                                               | Private        |
+| GET projects           | GET    | /projects                   |                                               | Public         |
+| GET one project        | GET    | /projects/:projectId        |                                               | Public         |
+| POST project           | POST   | /projects/new               | TBD                                           | Private        |
+| Edit project           | PUT    | /projects/edit/:projectId   | TBD                                           | Private        |
+| Delete project         | DELETE | /projects/delete/:projectId |                                               | Private        |
+| Sends new review       | POST   | /reviews/new                | TBD                                           | Private        |
 
 ---
 

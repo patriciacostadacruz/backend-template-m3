@@ -11,7 +11,6 @@ const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 // @access  Private
 router.get("/", isAuthenticated, async (req, res, next) => {
 	const { _id } = req.payload;
-  console.log(req.payload)
   try {
     const user = await User.findById(_id);
     const userReviews = await Review.find({ personRated: _id });
@@ -72,7 +71,6 @@ router.put("/", isAuthenticated, async (req, res, next) => {
 // @route   PUT /profile/password-edit
 // @access  Private
 router.put("/password-edit", isAuthenticated, async (req, res, next) => {
-  console.lof(req.payload);
   const { _id: userId, hashedPassword } = req.payload;
   const { oldPassword, password, passwordConfirmation } = req.body;
   if (!oldPassword || !password || !passwordConfirmation) {
