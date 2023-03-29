@@ -2,6 +2,8 @@ const router = require("express").Router();
 const Project = require("../models/Project");
 const User = require("../models/User");
 const Review = require("../models/Review");
+const bcrypt = require("bcryptjs");
+const saltRounds = 10;
 const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 
 // @desc    Gets profile view 
@@ -32,7 +34,6 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     firstName,
     lastName,
     email,
-    password,
     role,
     company,
     industry,
@@ -43,7 +44,6 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     !firstName ||
     !lastName ||
     !email ||
-    !password ||
     !role ||
     !company ||
     !industry ||
@@ -58,10 +58,63 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     return;
   }
   try {
-    const response = await User.findByIdAndUpdate(userId, req.body, {
+    await User.findByIdAndUpdate(userId, req.body, {
       new: true,
     });
     res.status(204).json({ message: "Profile updated successfully." });
+    res.redirect("/profile");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// @desc    Edits password 
+// @route   PUT /profile/password-edit
+// @access  Private
+router.put("/password-edit", isAuthenticated, async (req, res, next) => {
+  console.lof(req.payload);
+  const { _id: userId, hashedPassword } = req.payload;
+  const { oldPassword, password, passwordConfirmation } = req.body;
+  if (!oldPassword || !password || !passwordConfirmation) {
+    res.status(400).json({
+      message: "Please write your new password.",
+    });
+    return;
+  }
+  const match = await bcrypt.compare(oldPassword, hashedPassword);
+  if (!match) {
+    res.status(400).json({message: "Your old password doesn't match."});
+  }
+  if (password !== passwordConfirmation) {
+    res.status(400).json({
+      message:
+        "Confirmation password doesn't match the new one chosen.",
+    });
+    return;
+  }
+  // Use regex to validate the password format
+  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  if (!passwordRegex.test(password)) {
+    res
+      .status(400)
+      .json({
+        message:
+          "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
+      });
+    return;
+  }
+  try {
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashedNewPassword = bcrypt.hashSync(password, salt);
+    await User.findByIdAndUpdate(
+      userId,
+      { hashedPassword: hashedNewPassword },
+      {
+        new: true,
+      }
+    );
+    res.status(204).json({ message: "Password updated successfully." });
+    res.redirect("/profile");
   } catch (error) {
     console.error(error);
   }
