@@ -5,7 +5,7 @@ const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 // @desc    Creates a review
 // @route   POST /reviews/new
 // @access  Private
-router.post("/new", async (req, res, next) => {
+router.post("/new", isAuthenticated, async (req, res, next) => {
   const {
     title,
     rating,

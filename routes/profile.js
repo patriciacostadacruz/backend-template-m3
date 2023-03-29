@@ -7,7 +7,7 @@ const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 // @desc    Gets profile view 
 // @route   GET /profile
 // @access  Private
-router.get("/", async (req, res, next) => {
+router.get("/", isAuthenticated, async (req, res, next) => {
 	const { _id: userId } = req.payload;
   try {
     const user = await User.findById(userId);
@@ -24,7 +24,7 @@ router.get("/", async (req, res, next) => {
 // @desc    Edits profile data 
 // @route   PUT /profile
 // @access  Private
-router.put("/", async (req, res, next) => {
+router.put("/", isAuthenticated, async (req, res, next) => {
   const { _id: userId } = req.payload;
   const {
     firstName,
@@ -68,7 +68,7 @@ router.put("/", async (req, res, next) => {
 // @desc    Gets another user profile 
 // @route   GET /profile/:userId
 // @access  Private
-router.get("/:userId", async (req, res, next) => {
+router.get("/:userId", isAuthenticated, async (req, res, next) => {
 	const {userId} = req.params;
   try {
     const otherUser = await User.findById(userId);

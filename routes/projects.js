@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
 // @desc    Creates new project
 // @route   POST /projects
 // @access  Private
-router.post("/", async (req, res, next) => {
+router.post("/", isAuthenticated, async (req, res, next) => {
   const {
     title,
     status,
@@ -42,7 +42,7 @@ router.post("/", async (req, res, next) => {
 // @desc    Get one project
 // @route   GET /projects/:projectId
 // @access  Private
-router.get("/:projectId", async (req, res, next) => {
+router.get("/:projectId", isAuthenticated, async (req, res, next) => {
   const {projectId} = req.params;
   try {
     const project = await Project.findById(projectId);
@@ -55,7 +55,7 @@ router.get("/:projectId", async (req, res, next) => {
 // @desc    Updates a project
 // @route   PUT /projects/:projectId
 // @access  Private
-router.put("/:projectId", async (req, res, next) => {
+router.put("/:projectId", isAuthenticated, async (req, res, next) => {
   const {projectId} = req.params;
   const {
     title,
@@ -91,7 +91,7 @@ router.put("/:projectId", async (req, res, next) => {
 // @desc    Deletes a project
 // @route   DELETE /projects/:projectId
 // @access  Private
-router.delete("/:projectId", async (req, res, next) => {
+router.delete("/:projectId", isAuthenticated, async (req, res, next) => {
   const {projectId} = req.params;
   try {
     const deletedProject = await Project.findByIdAndDelete(projectId);
