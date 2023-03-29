@@ -1,10 +1,19 @@
 const router = require('express').Router();
+const Project = require("../models/Project");
 
-// @desc    Index page for the API
+// @desc    Home page
 // @route   GET /
 // @access  Public
-router.get('/', async (req, res, next) => {;
-  res.send('This is the REST API home. Add an endpoint to see data.')
+router.get("/", async (req, res, next) => {
+  try {
+    const projects = await Project.aggregate([
+      { $match: { closed: false } },
+      { $sample: { size: 3 } },
+    ]);
+    res.json(projects);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;
