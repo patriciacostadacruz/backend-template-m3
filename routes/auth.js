@@ -92,6 +92,7 @@ router.post('/login', async (req, res, next) => {
           lastName: userInDB.lastName,
           image: userInDB.image,
           email: userInDB.email,
+          hashedPassword: userInDB.hashedPassword,
           role: userInDB.role,
           linkedIn: userInDB.linkedIn,
           company: userInDB.company,

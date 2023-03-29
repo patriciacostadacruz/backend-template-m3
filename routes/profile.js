@@ -3,6 +3,7 @@ const Project = require("../models/Project");
 const User = require("../models/User");
 const Review = require("../models/Review");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 
@@ -113,6 +114,19 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
     );
     res.status(204).json({ message: "Password updated successfully." });
     res.redirect("/profile");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// @desc    Enable/disables account 
+// @route   PUT /profile/status-update
+// @access  Private
+router.put("/status-update", isAuthenticated, async (req, res, next) => {
+  const { _id: userId } = req.payload;
+  try {
+    await User.findByIdAndUpdate(userId, req.body, {new: true});
+    res.status(204).json({ message: "Account status updated successfully." });
   } catch (error) {
     console.error(error);
   }
