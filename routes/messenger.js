@@ -53,7 +53,9 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
   try {
     const newMessage = await Message.create({ sender, recipient, content });
     const conversation = await Conversation.findById(conversationId);
-    conversation.messages.push(newMessage);
+    conversation.messages.push(newMessage._id);
+    // keep this line for the message to be added in messages array in conversation document
+    await conversation.save();
     res.status(201).json({ message: newMessage });
   } catch (error) {
     console.log(error);
