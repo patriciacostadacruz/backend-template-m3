@@ -72,7 +72,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
 // @route   PUT /profile/password-edit
 // @access  Private
 router.put("/password-edit", isAuthenticated, async (req, res, next) => {
-  const { _id: userId, hashedPassword } = req.payload;
+  const { _id: userId } = req.payload;
   const { oldPassword, password, passwordConfirmation } = req.body;
   if (!oldPassword || !password || !passwordConfirmation) {
     res.status(400).json({
@@ -80,7 +80,13 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
     });
     return;
   }
-  const match = await bcrypt.compare(oldPassword, hashedPassword);
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found.",
+    });
+  }
+  const match = await bcrypt.compare(oldPassword, user.hashedPassword);
   if (!match) {
     res.status(400).json({message: "Your old password doesn't match."});
   }
