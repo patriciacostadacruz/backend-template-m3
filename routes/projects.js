@@ -27,7 +27,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     fundingNeeded,
     owner
   } = req.body;
-  if (!title || !status || !location || !description || !industry || !fundingNeeded || !owner) {
+  if (!title || !status || !location || !description || industry.length < 1 || !fundingNeeded || !owner) {
     res.status(400).json({ message: "Please fill all the fields to add a new project." });
     return;
   }
@@ -71,7 +71,7 @@ router.put("/:projectId", isAuthenticated, async (req, res, next) => {
     !status ||
     !location ||
     !description ||
-    !industry ||
+    industry.length < 1 ||
     !fundingNeeded ||
     !owner
   ) {

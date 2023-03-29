@@ -21,7 +21,7 @@ router.post('/signup', async (req, res, next) => {
     industry,
     bio,
     status } = req.body; 
-  if (!firstName || !lastName || !email || !password || !role || !company || !industry || ! bio || !status) {
+  if (!firstName || !lastName || !email || !password || !role || industry.length < 1 || !company || ! bio || !status) {
     res.status(400).json({ message: 'Please fill all the fields to sign up.' });
     return;
   }

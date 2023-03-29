@@ -46,7 +46,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     !email ||
     !role ||
     !company ||
-    !industry ||
+    industry.length < 1 ||
     !bio ||
     !status
   ) {
@@ -131,8 +131,12 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
 router.put("/status-update", isAuthenticated, async (req, res, next) => {
   const { _id: userId } = req.payload;
   try {
-    await User.findByIdAndUpdate(userId, req.body, {new: true});
-    res.status(204).json({ message: "Account status updated successfully." });
+    if (req.body.status.length < 1) {
+      res.status(400).json({message: "You need to choose the status of your account."});
+    } else {
+      await User.findByIdAndUpdate(userId, req.body, {new: true});
+      res.status(204).json({ message: "Account status updated successfully." });
+    }
   } catch (error) {
     console.error(error);
   }
