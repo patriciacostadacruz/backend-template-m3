@@ -9,7 +9,7 @@ router.get("/", async (req, res, next) => {
     const projects = await Project.find({ status: { $ne: "closed" } }).sort({ createdAt: -1 }).limit(3);
     res.json({ projects });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
