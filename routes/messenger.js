@@ -17,9 +17,9 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 });
 
 // @desc    Creates a new conversation
-// @route   POST /conversations/new
+// @route   POST /conversations
 // @access  Private
-router.post("/new", isAuthenticated, async (req, res, next) => {
+router.post("/", isAuthenticated, async (req, res, next) => {
   const { users } = req.body;
   try {
     const newConversation = await Conversation.create({ users });
@@ -59,6 +59,51 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
     res.status(201).json({ message: newMessage });
   } catch (error) {
     console.log(error);
+  }
+});
+
+// @desc    Edits message
+// @route   PUT /conversations/:messageId
+// @access  Private
+router.put("/:messageId", isAuthenticated, async (req, res, next) => {
+  const { messageId } = req.params;
+  const { sender, recipient, content } = req.body;
+  if (!sender || !recipient || !content) {
+    res.status(400).json({ message: "Please fill all the fields to update your message."});
+    return;
+  }
+  try {
+     const editedMessage = await Message.findByIdAndUpdate(messageId, req.body, {new: true});
+     res.status(201).json({ message: editedMessage });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// @desc    Deletes a message
+// @route   DELETE /conversations/:messageId
+// @access  Private
+router.delete("/:messageId", isAuthenticated, async (req, res, next) => {
+  const { messageId } = req.params;
+  try {
+    const deletedMessage = await Message.findByIdAndDelete(messageId);
+    res.status(201).json(deletedMessage);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// @desc    Deletes a conversation
+// @route   DELETE /conversations/:conversationId
+// @access  Private
+router.delete("/:conversationId", isAuthenticated, async (req, res, next) => {
+  const { conversationId } = req.params;
+  try {
+    const deletedConversation = await Conversation.findByIdAndDelete(conversationId);
+    await Message.deleteMany({ _id: { $in: deletedConversation.messages } });
+    res.status(201).json({ message: "Conversation deleted successfully." });
+  } catch (error) {
+    console.error(error);
   }
 });
 
