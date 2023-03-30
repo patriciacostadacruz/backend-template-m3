@@ -26,8 +26,8 @@ router.post("/new", isAuthenticated, async (req, res, next) => {
   if (rating < 0 || rating > 5) {
     res.status(400).json({ message: "You must give a rate between 0 and 5."});
   }
-  if (comment !== String || title !== String) {
-    res.status(400).json({ message: "Please add a valid title and comment."});
+  if (typeof title !== "string" || typeof comment !== "string") {
+    res.status(400).json({ message: "Please add a valid title and comment." });
     return;
   }
   try {
