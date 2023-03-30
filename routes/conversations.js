@@ -36,7 +36,8 @@ router.post("/", isAuthenticated, async (req, res, next) => {
       users: { $all: [sender, recipient] },
     });
     if (existingConversation) {
-      return res.status(400).json({ message: "You already have a conversation with this user." });
+      res.status(400).json({ message: "You already have a conversation with this user." });
+      return;
     }
     const newConversation = await Conversation.create({
       users: { recipient, sender },
