@@ -71,15 +71,12 @@ router.post('/signup', async (req, res, next) => {
 router.post('/login', async (req, res, next) => { 
   console.log(req.headers);
   const { email, password } = req.body;
-  // Check if email or password are provided as empty string 
   if (email === "" || password === "") {
     res.status(400).json({ message: 'Please fill all the fields to login.' });
     return;
   }
   try {
-    // First let's see if the user exists
     const userInDB = await User.findOne({ email });
-    // If they don't exist, return an error
     if (!userInDB) {
       res.status(404).json({ success: false, message: `No user registered by email ${email}` })
       return;
@@ -109,7 +106,6 @@ router.post('/login', async (req, res, next) => {
         );
         res.status(200).json({ authToken: authToken })
       } else {
-        // If the password is not right, return an error
         res.status(401).json({ success: false, message: 'Unable to authenticate user.'})
       }
     }
