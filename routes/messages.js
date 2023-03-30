@@ -9,7 +9,11 @@ const Message = require("../models/Message");
 router.get("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { conversationId } = req.params;
   try {
-    const conversation = await Conversation.findById(conversationId).populate("messages").populate("users");
+    const conversation = await Conversation.findById(conversationId)
+      .populate("messages")
+      .populate("users")
+      // recent messages shown last so that the conversation flow has last message at the bottom
+      .sort({ "messages.createdAt": -1 }); ;
     res.status(200).json({ messages: conversation.messages });
   } catch (error) {
     next(error);
@@ -60,7 +64,6 @@ router.put("/:messageId", isAuthenticated, async (req, res, next) => {
 // @access  Private && Owner
 router.delete("/:messageId", isAuthenticated, async (req, res, next) => {
   const { messageId } = req.params;
-  // check that user in session is author of message to be deleted
   try {
     const deletedMessage = await Message.findByIdAndDelete(messageId);
     res.status(201).json(deletedMessage);
