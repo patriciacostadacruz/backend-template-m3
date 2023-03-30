@@ -131,7 +131,7 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
   const { _id: userId } = req.payload;
   try {
     if (req.body.status.length < 1) {
-      res.status(400).json({message: "You need to choose the status of your account."});
+      res.status(400).json({message: "You need to choose the status of your account: active or inactive."});
     } else {
       await User.findByIdAndUpdate(userId, req.body, {new: true});
       res.status(204).json({ message: "Account status updated successfully." });
