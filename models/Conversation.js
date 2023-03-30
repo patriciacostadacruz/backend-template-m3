@@ -13,7 +13,10 @@ const conversationSchema = new mongoose.Schema({
       ref: "Message",
     },
   ],
+},
+{
+  timestamps: true,
 });
-// timestamps
+
 
 module.exports = mongoose.model("Conversation", conversationSchema);
