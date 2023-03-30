@@ -130,8 +130,18 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
 router.put("/status-update", isAuthenticated, async (req, res, next) => {
   const { _id: userId } = req.payload;
   try {
-    if (req.body.status.length < 1) {
+    if (typeof req.body.status === "string" && req.body.status.length < 1) {
       res.status(400).json({message: "You need to choose the status of your account: active or inactive."});
+      return;
+    }
+    if (req.body.status !== "active" && req.body.status !== "inactive") {
+      res
+        .status(400)
+        .json({
+          message:
+            "The status can only be active or inactive.",
+        });
+      return;
     } else {
       await User.findByIdAndUpdate(userId, req.body, {new: true});
       res.status(204).json({ message: "Account status updated successfully." });
