@@ -14,5 +14,6 @@ const conversationSchema = new mongoose.Schema({
     },
   ],
 });
+// timestamps
 
 module.exports = mongoose.model("Conversation", conversationSchema);

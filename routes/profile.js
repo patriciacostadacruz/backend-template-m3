@@ -15,7 +15,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
   try {
     const user = await User.findById(_id);
     const userReviews = await Review.find({ personRated: _id });
-    // maybe separate projects owned and projects worked on as investors - TBD later
+    // populate
     const userProjects = await Project.find({
       $or: [{ owner: _id }, { investors: _id }],
     });
@@ -62,7 +62,6 @@ router.put("/", isAuthenticated, async (req, res, next) => {
       new: true,
     });
     res.status(204).json({ message: "Profile updated successfully." });
-    res.redirect("/profile");
   } catch (error) {
     console.error(error);
   }
@@ -89,6 +88,7 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
   const match = await bcrypt.compare(oldPassword, user.hashedPassword);
   if (!match) {
     res.status(400).json({message: "Your old password doesn't match."});
+    return;
   }
   if (password !== passwordConfirmation) {
     res.status(400).json({
@@ -119,7 +119,6 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
       }
     );
     res.status(204).json({ message: "Password updated successfully." });
-    res.redirect("/profile");
   } catch (error) {
     console.error(error);
   }
@@ -153,6 +152,7 @@ router.get("/:userId", isAuthenticated, async (req, res, next) => {
     const userProjects = await Project.find({
       $or: [{ owner: userId }, { investors: userId }],
     });
+    // populate
 		res.status(200).json({otherUser, userReviews, userProjects});
   } catch (error) {
     console.error(error);

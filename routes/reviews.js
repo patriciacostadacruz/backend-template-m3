@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Review = require("../models/Review");
 const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
+// remove unused middles (if there are)
 
 // @desc    Creates a review
 // @route   POST /reviews/new
@@ -10,7 +11,7 @@ router.post("/new", isAuthenticated, async (req, res, next) => {
     title,
     rating,
     comment,
-    personRating,
+    personRating, // from req.payload
     personRated
   } = req.body;
   if (
