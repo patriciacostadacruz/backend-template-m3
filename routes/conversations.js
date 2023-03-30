@@ -38,22 +38,4 @@ router.post("/", isAuthenticated, async (req, res, next) => {
   }
 });
 
-// @desc    Deletes a conversation
-// @route   DELETE /conversations/:conversationId
-// @access  Private && Owner
-router.delete("/:conversationId", isAuthenticated, async (req, res, next) => {
-  const { conversationId } = req.params;
-  // check that user in session is author of message to be deleted
-  try {
-    const conversation = await Conversation.findById(conversationId);
-    await Message.deleteMany({ _id: { $in: conversation.messages } });
-		await Conversation.findByIdAndDelete(conversationId);
-    res
-      .status(201)
-      .json({ message: "Conversation deleted successfully." });
-  } catch (error) {
-    console.error(error);
-  }
-});
-
 module.exports = router;
