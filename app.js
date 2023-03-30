@@ -13,6 +13,7 @@ const profileRouter = require("./routes/profile");
 const reviewRouter = require("./routes/reviews");
 const messageRouter = require("./routes/messages");
 const convRouter = require("./routes/conversations");
+const userRouter = require("./routes/users");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/profile", profileRouter);
 app.use("/reviews", reviewRouter);
 app.use("/conversations", convRouter);
 app.use("/messages", messageRouter);
+app.use("/users", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
