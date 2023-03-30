@@ -16,7 +16,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     // populate users and conversation
     res.status(200).json({ conversations });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
@@ -30,7 +30,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     const newConversation = await Conversation.create({ users });
     res.status(201).json({ conversation: newConversation });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
@@ -45,7 +45,7 @@ router.get("/:conversationId", isAuthenticated, async (req, res, next) => {
     );
     res.status(200).json({ messages: conversation.messages });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
@@ -63,7 +63,7 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
     await conversation.save();
     res.status(201).json({ message: newMessage }); // return conversation with new:true AND populated
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 

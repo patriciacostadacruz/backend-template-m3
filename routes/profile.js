@@ -21,7 +21,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     });
     res.status(200).json({user, userReviews, userProjects});
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
@@ -63,7 +63,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     });
     res.status(204).json({ message: "Profile updated successfully." });
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
@@ -120,7 +120,7 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
     );
     res.status(204).json({ message: "Password updated successfully." });
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
@@ -137,7 +137,7 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
       res.status(204).json({ message: "Account status updated successfully." });
     }
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
@@ -155,7 +155,7 @@ router.get("/:userId", isAuthenticated, async (req, res, next) => {
     // populate
 		res.status(200).json({otherUser, userReviews, userProjects});
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 

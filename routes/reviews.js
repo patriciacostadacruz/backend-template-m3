@@ -30,7 +30,7 @@ router.post("/new", isAuthenticated, async (req, res, next) => {
     const newReview = await Review.create(req.body);
     res.status(201).json(newReview);
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 

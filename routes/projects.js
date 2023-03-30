@@ -11,7 +11,7 @@ router.get("/", async (req, res, next) => {
     res.status(200).json(projects);
   } catch (error) {
     // next(error)
-    console.error(error);
+    next(error);
   }
 });
 
@@ -36,7 +36,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     const newProject = await Project.create(req.body);
     res.status(201).json(newProject);
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
@@ -49,7 +49,7 @@ router.get("/:projectId", isAuthenticated, async (req, res, next) => {
     const project = await Project.findById(projectId);
     res.status(200).json(project);
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
@@ -86,7 +86,7 @@ router.put("/:projectId", isAuthenticated, async (req, res, next) => {
     const response = await Project.findByIdAndUpdate(projectId, req.body, {new: true});
     res.status(204).json({message: "Project data updated successfully."});
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
@@ -99,7 +99,7 @@ router.delete("/:projectId", isAuthenticated, async (req, res, next) => {
     const deletedProject = await Project.findByIdAndDelete(projectId);
     res.status(201).json(deletedProject);
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 });
 
