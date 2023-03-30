@@ -10,7 +10,6 @@ router.get("/", async (req, res, next) => {
     const projects = await Project.find();
     res.status(200).json(projects);
   } catch (error) {
-    // next(error)
     next(error);
   }
 });
@@ -25,15 +24,15 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     location,
     description,
     industry,
-    fundingNeeded,
-    owner
+    fundingNeeded
   } = req.body;
+  const { _id: owner } = req.payload;
   if (!title || !status || !location || !description || industry.length < 1 || !fundingNeeded || !owner) {
     res.status(400).json({ message: "Please fill all the fields to add a new project." });
     return;
   }
   try {
-    const newProject = await Project.create(req.body);
+    const newProject = await Project.create({ title, status, location, description, industry, fundingNeeded, owner });
     res.status(201).json(newProject);
   } catch (error) {
     next(error);
@@ -65,7 +64,6 @@ router.put("/:projectId", isAuthenticated, async (req, res, next) => {
     description,
     industry,
     fundingNeeded,
-    owner,
   } = req.body;
   if (
     !title ||
@@ -73,8 +71,7 @@ router.put("/:projectId", isAuthenticated, async (req, res, next) => {
     !location ||
     !description ||
     industry.length < 1 ||
-    !fundingNeeded ||
-    !owner
+    !fundingNeeded 
   ) {
     res
       .status(400)
@@ -82,8 +79,7 @@ router.put("/:projectId", isAuthenticated, async (req, res, next) => {
     return;
   }
   try {
-    // remove unused variables
-    const response = await Project.findByIdAndUpdate(projectId, req.body, {new: true});
+    await Project.findByIdAndUpdate(projectId, req.body, {new: true});
     res.status(204).json({message: "Project data updated successfully."});
   } catch (error) {
     next(error);
