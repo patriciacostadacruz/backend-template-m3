@@ -11,7 +11,8 @@ const authRouter = require('./routes/auth');
 const projectRouter = require("./routes/projects");
 const profileRouter = require("./routes/profile");
 const reviewRouter = require("./routes/reviews");
-const messengerRouter = require("./routes/messenger");
+const messageRouter = require("./routes/messages");
+const convRouter = require("./routes/conversations");
 
 const app = express();
 
@@ -31,7 +32,8 @@ app.use('/auth', authRouter);
 app.use("/projects", projectRouter);
 app.use("/profile", profileRouter);
 app.use("/reviews", reviewRouter);
-app.use("/conversations", messengerRouter);
+app.use("/conversations", convRouter);
+app.use("/messages", messageRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
