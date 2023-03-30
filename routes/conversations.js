@@ -9,9 +9,15 @@ const Message = require("../models/Message");
 router.get("/", isAuthenticated, async (req, res, next) => {
   const { _id } = req.payload;
   try {
-    const conversations = await Conversation.find({ users: _id }); // _id in users
-    // decide if you sort conversations and how
-    // populate users and conversation
+    const conversations = await Conversation.find({ _id: { $in: users } })
+      .populate("users")
+      .populate({
+        path: "messages",
+        options: { sort: { createdAt: -1 } },
+      })
+      // sort conversations by the most recent message's createdAt in descending order
+      .sort({ "messages.createdAt": -1 }); 
+
     res.status(200).json({ conversations });
   } catch (error) {
     next(error);
