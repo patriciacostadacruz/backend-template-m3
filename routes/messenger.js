@@ -100,8 +100,11 @@ router.delete("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { conversationId } = req.params;
   try {
     const deletedConversation = await Conversation.findByIdAndDelete(conversationId);
+    if (!deletedConversation) {
+      return res.status(404).json({ message: "Conversation not found." });
+    }
     await Message.deleteMany({ _id: { $in: deletedConversation.messages } });
-    res.status(201).json({ message: "Conversation deleted successfully." });
+    res.status(201).json({ message: "Conversation and messages deleted successfully." });
   } catch (error) {
     console.error(error);
   }
