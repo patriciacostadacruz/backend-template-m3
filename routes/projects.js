@@ -7,7 +7,7 @@ const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 // @access  Public
 router.get("/", async (req, res, next) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find().sort({ createdAt: -1 });
     res.status(200).json(projects);
   } catch (error) {
     next(error);
