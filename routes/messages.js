@@ -32,7 +32,6 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { conversationId } = req.params;
   const { recipient, content } = req.body;
   const { _id: sender } = req.payload;
-  // add validations if conversation doesn't exist
   try {
     const conversationInDB = await Conversation.findById(conversationId);
     if (!conversationInDB) {
