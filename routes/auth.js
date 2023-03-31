@@ -3,7 +3,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
-const { isAuthenticated, isAdmin } = require('../middlewares/jwt');
+const { isAuthenticated } = require('../middlewares/jwt');
 
 // @desc    SIGN UP new user
 // @route   POST /auth/signup

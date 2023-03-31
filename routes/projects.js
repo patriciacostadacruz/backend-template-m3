@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Project = require("../models/Project");
-const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
+const { isAuthenticated } = require("../middlewares/jwt");
 
 // @desc    Gets all projects
 // @route   GET /projects

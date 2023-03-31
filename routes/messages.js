@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
+const { isAuthenticated } = require("../middlewares/jwt");
+const { isOwner } = require("../middlewares/owner");
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 
@@ -12,6 +13,7 @@ router.get("/:conversationId", isAuthenticated, async (req, res, next) => {
     const conversationInDB = await Conversation.findById(conversationId);
     if (!conversationInDB) {
       res.status(400).json({ message: "This conversation doesn't exist." });
+      return;
     } else {
       const conversation = await Conversation.findById(conversationId)
         .populate("messages")
@@ -36,6 +38,14 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
     const conversationInDB = await Conversation.findById(conversationId);
     if (!conversationInDB) {
       res.status(400).json({ message: "This conversation doesn't exist." });
+      return;
+    }
+    const conversationWithUsers = await Conversation.find({
+      users: { $in: { _id: sender } },
+    })
+    if (!conversationWithUsers) {
+      res.status(400).json({ message: "You are not allowed to send messages in this conversation." });
+      return;
     } else {
       const newMessage = await Message.create({ sender, recipient, content });
       const updatedConversation = await Conversation.findByIdAndUpdate(

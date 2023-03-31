@@ -5,7 +5,7 @@ const Review = require("../models/Review");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
-const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
+const { isAuthenticated } = require("../middlewares/jwt");
 
 // @desc    Gets profile view 
 // @route   GET /profile
