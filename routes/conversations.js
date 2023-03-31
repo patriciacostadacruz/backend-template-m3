@@ -26,21 +26,21 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 });
 
 // @desc    Creates a new conversation
-// @route   POST /conversations
+// @route   POST /conversations/:recipientId
 // @access  Private
-router.post("/", isAuthenticated, async (req, res, next) => {
-  const { recipient } = req.body;
+router.post("/:recipientId", isAuthenticated, async (req, res, next) => {
+  const { recipientId } = req.params;
   const { _id: sender } = req.payload;
   try {
     const existingConversation = await Conversation.findOne({
-      users: { $all: [sender, recipient] },
+      users: { $all: [sender, recipientId] },
     });
     if (existingConversation) {
       res.status(400).json({ message: "You already have a conversation with this user." });
       return;
     }
     const newConversation = await Conversation.create({
-      users: { recipient, sender },
+      users: [ recipientId, sender ],
     });
     res.status(201).json({ conversation: newConversation });
   } catch (error) {
