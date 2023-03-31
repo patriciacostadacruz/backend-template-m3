@@ -78,7 +78,6 @@ const userSchema = new Schema(
     },
     linkedIn: {
       type: String,
-      unique: true,
     },
     company: {
       type: String,
@@ -249,32 +248,25 @@ const reviewSchema = new Schema(
 );
 ```
 
-### Messages
+### Conversations
 
-Messages in the database have the following properties:
+Conversations in the database have the following properties:
 
 ```js
-const messageSchema = new Schema(
+const conversationSchema = new mongoose.Schema(
   {
-    sender: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    recipient: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    project: {
-      type: Schema.Types.ObjectId,
-      ref: "Project",
-      required: true,
-    },
-    message: {
-      type: String,
-      required: [true, "Please write your message."],
-    },
+    users: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    messages: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -282,25 +274,60 @@ const messageSchema = new Schema(
 );
 ```
 
+### Messages
+
+Messages in the database have the following properties:
+
+```js
+const messageSchema = new mongoose.Schema(
+  {
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+```
+
 ---
 
 ## API endpoints and usage
 
-| Action                 | Method | Endpoint                    | Req.body                                                                                        | Private/Public |
-| ---------------------- | ------ | --------------------------- | ----------------------------------------------------------------------------------------------- | -------------- |
-| SIGN UP user           | POST   | /auth/signup                | { firstName, lastName, image, email, password, role, linkedIn, company, industry, bio, status } | Public         |
-| LOG IN user            | POST   | /auth/login                 | { email, password }                                                                             | Public         |
-| GET logged in user     | GET    | /auth/me                    |                                                                                                 | Private        |
-| See profile            | GET    | /profile                    |                                                                                                 | Private        |
-| Edit profile           | PUT    | /profile/edit               | { firstName, lastName, image, email, role, linkedIn, company, industry, bio, status }           | Private        |
-| Edit password          | PUT    | /profile/password-edit      | { oldPassword, password, passwordConfirmation }                                                 | Private        |
-| Get other user profile | GET    | /profile/:userId            |                                                                                                 | Private        |
-| GET projects           | GET    | /projects                   |                                                                                                 | Public         |
-| GET one project        | GET    | /projects/:projectId        |                                                                                                 | Public         |
-| POST project           | POST   | /projects/new               | { title, status, location, description, industry, fundingNeeded, owner }                        | Private        |
-| Edit project           | PUT    | /projects/edit/:projectId   | { title, status, location, description, industry, fundingNeeded, owner }                        | Private        |
-| Delete project         | DELETE | /projects/delete/:projectId |                                                                                                 | Private        |
-| Sends new review       | POST   | /reviews/new                | { title, rating, comment, personRating, personRated }                                           | Private        |
+| Action                         | Method | Endpoint                    | Req.body                                                                                        | Private/Public |
+| ------------------------------ | ------ | --------------------------- | ----------------------------------------------------------------------------------------------- | -------------- |
+| Get home page                  | GET    | /                           |                                                                                                 | Public         |
+| SIGN UP user                   | POST   | /auth/signup                | { firstName, lastName, image, email, password, role, linkedIn, company, industry, bio, status } | Public         |
+| LOG IN user                    | POST   | /auth/login                 | { email, password }                                                                             | Public         |
+| GET logged in user             | GET    | /auth/me                    |                                                                                                 | Private        |
+| See profile                    | GET    | /profile                    |                                                                                                 | Private        |
+| Edit profile                   | PUT    | /profile/edit               | { firstName, lastName, image, email, role, linkedIn, company, industry, bio, status }           | Private        |
+| Edit password                  | PUT    | /profile/password-edit      | { oldPassword, password, passwordConfirmation }                                                 | Private        |
+| Enable/disable account         | PUT    | /profile/status-update      | { status }                                                                                      | Private        |
+| Get other user profile         | GET    | /profile/:userId            |                                                                                                 | Private        |
+| GET projects                   | GET    | /projects                   |                                                                                                 | Public         |
+| GET one project                | GET    | /projects/:projectId        |                                                                                                 | Public         |
+| POST project                   | POST   | /projects/new               | { title, status, location, description, industry, fundingNeeded, owner }                        | Private        |
+| Edit project                   | PUT    | /projects/edit/:projectId   | { title, status, location, description, industry, fundingNeeded, owner }                        | Private        |
+| Delete project                 | DELETE | /projects/delete/:projectId |                                                                                                 | Private        |
+| Sends new review               | POST   | /reviews/new                | { title, rating, comment, personRating, personRated }                                           | Private        |
+| Gets all review                | GET    | /reviews/all                |                                                                                                 | Private        |
+| Gets all conversations         | GET    | /conversations              |                                                                                                 | Private        |
+| Creates a conversation         | POST   | /conversations/:recipientId |                                                                                                 | Private        |
+| Shows messages in conversation | GET    | /messages/:conversationId   |                                                                                                 | Private        |
+| Sends message in conversation  | POST   | /messages/:conversationId   | { recipient, content }                                                                          | Private        |
+| Edits a message                | PUT    | /messages/:messageId        |                                                                                                 | Private        |
+| Deletes a message              | DELETE | /messages/:messageId        |                                                                                                 | Private        |
 
 ---
 
