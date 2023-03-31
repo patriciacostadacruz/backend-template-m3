@@ -15,13 +15,14 @@ router.post('/signup', async (req, res, next) => {
     image,
     email,
     password,
+    passwordConfirmation,
     role,
     linkedIn,
     company,
     industry,
     bio,
     status } = req.body; 
-  if (!firstName || !lastName || !email || !password || !role || industry.length < 1 || !company || ! bio || !status) {
+  if (!firstName || !lastName || !email || !password || !passwordConfirmation || !role || industry.length < 1 || !company || ! bio || !status) {
     res.status(400).json({ message: 'Please fill all the fields to sign up.' });
     return;
   }
@@ -29,6 +30,12 @@ router.post('/signup', async (req, res, next) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
     res.status(400).json({ message: 'Not a valid email format.' });
+    return;
+  }
+  if (password !== passwordConfirmation) {
+    res.status(400).json({
+      message: "Confirmation password doesn't match.",
+    });
     return;
   }
    // Use regex to validate the password format
