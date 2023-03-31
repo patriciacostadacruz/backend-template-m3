@@ -6,7 +6,7 @@ const Users = require("../models/User");
 // @access  Private
 router.get("/", async (req, res, next) => {
   try {
-    const users = await Users.find({ status: { $ne: "inactive" }, role: { $ne: "admin"} }).sort({ firstName: -1 });
+    const users = await Users.find({ status: { $ne: "inactive" }, role: { $ne: "admin"} }).sort({ firstName: 1 });
     res.json({ users });
   } catch (error) {
     next(error);
