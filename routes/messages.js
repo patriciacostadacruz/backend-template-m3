@@ -29,7 +29,11 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { _id: sender } = req.payload;
   try {
     const newMessage = await Message.create({ sender, recipient, content });
-    const updatedConversation = await Conversation.findByIdAndUpdate(conversationId, { $push: { messages: newMessage }}, { new: true }).populate("messages");
+   const updatedConversation = await Conversation.findByIdAndUpdate(
+     conversationId,
+     { $push: { messages: newMessage._id } },
+     { new: true }
+   ).populate("messages");
     res.status(201).json({ message: updatedConversation });
   } catch (error) {
     next(error);
