@@ -9,12 +9,17 @@ const Message = require("../models/Message");
 router.get("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { conversationId } = req.params;
   try {
-    const conversation = await Conversation.findById(conversationId)
-      .populate("messages")
-      .populate("users")
-      // recent messages shown last so that the conversation flow has last message at the bottom
-      .sort({ "messages.createdAt": -1 }); ;
-    res.status(200).json({ messages: conversation.messages });
+    const conversationInDB = await Conversation.findById(conversationId);
+    if (!conversationInDB) {
+      res.status(400).json({ message: "This conversation doesn't exist." });
+    } else {
+      const conversation = await Conversation.findById(conversationId)
+        .populate("messages")
+        .populate("users")
+        // recent messages shown last so that the conversation flow has last message at the bottom
+        .sort({ "messages.createdAt": -1 });
+      res.status(200).json({ messages: conversation.messages });
+    }
   } catch (error) {
     next(error);
   }
@@ -27,14 +32,20 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { conversationId } = req.params;
   const { recipient, content } = req.body;
   const { _id: sender } = req.payload;
+  // add validations if conversation doesn't exist
   try {
-    const newMessage = await Message.create({ sender, recipient, content });
-   const updatedConversation = await Conversation.findByIdAndUpdate(
-     conversationId,
-     { $push: { messages: newMessage._id } },
-     { new: true }
-   ).populate("messages");
-    res.status(201).json({ message: updatedConversation });
+    const conversationInDB = await Conversation.findById(conversationId);
+    if (!conversationInDB) {
+      res.status(400).json({ message: "This conversation doesn't exist." });
+    } else {
+      const newMessage = await Message.create({ sender, recipient, content });
+      const updatedConversation = await Conversation.findByIdAndUpdate(
+        conversationId,
+        { $push: { messages: newMessage._id } },
+        { new: true }
+      ).populate("messages");
+      res.status(201).json({ message: updatedConversation });
+    }
   } catch (error) {
     next(error);
   }
@@ -54,9 +65,13 @@ router.put("/:messageId", isAuthenticated, async (req, res, next) => {
     return;
   }
   try {
-    const editedMessage = await Message.findByIdAndUpdate(messageId, { sender, recipient, content }, {
-      new: true,
-    });
+    const editedMessage = await Message.findByIdAndUpdate(
+      messageId,
+      { sender, recipient, content },
+      {
+        new: true,
+      }
+    );
     res.status(201).json({ message: editedMessage });
   } catch (error) {
     console.error(error);
