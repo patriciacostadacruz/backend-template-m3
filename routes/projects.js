@@ -7,7 +7,7 @@ const { isAuthenticated } = require("../middlewares/jwt");
 // @access  Public
 router.get("/", async (req, res, next) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 });
+    const projects = await Project.find().sort({ createdAt: -1 }).populate("owner").populate("investors");
     res.status(200).json(projects);
   } catch (error) {
     next(error);
@@ -45,7 +45,9 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 router.get("/:projectId", isAuthenticated, async (req, res, next) => {
   const {projectId} = req.params;
   try {
-    const project = await Project.findById(projectId);
+    const project = await Project.findById(projectId)
+      .populate("owner")
+      .populate("investors");
     res.status(200).json(project);
   } catch (error) {
     next(error);

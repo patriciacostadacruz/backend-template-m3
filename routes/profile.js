@@ -14,11 +14,10 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 	const { _id } = req.payload;
   try {
     const user = await User.findById(_id);
-    const userReviews = await Review.find({ personRated: _id });
-    // populate
+    const userReviews = await Review.find({ personRated: _id }).populate("personRated").populate("personRating");
     const userProjects = await Project.find({
       $or: [{ owner: _id }, { investors: _id }],
-    });
+    }).populate("owner").populate("investors");
     res.status(200).json({user, userReviews, userProjects});
   } catch (error) {
     next(error);
@@ -158,11 +157,12 @@ router.get("/:userId", isAuthenticated, async (req, res, next) => {
 	const {userId} = req.params;
   try {
     const otherUser = await User.findById(userId);
-    const userReviews = await Review.find({personRated: userId});
+    const userReviews = await Review.find({ personRated: userId })
+      .populate("personRated")
+      .populate("personRating");
     const userProjects = await Project.find({
       $or: [{ owner: userId }, { investors: userId }],
-    });
-    // populate
+    }).populate("owner").populate("investors");
 		res.status(200).json({otherUser, userReviews, userProjects});
   } catch (error) {
     next(error);

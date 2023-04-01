@@ -51,7 +51,7 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
         conversationId,
         { $push: { messages: newMessage._id } },
         { new: true }
-      ).populate("messages");
+      ).populate("messages").populate("users");
       res.status(201).json({ message: updatedConversation });
     }
   } catch (error) {

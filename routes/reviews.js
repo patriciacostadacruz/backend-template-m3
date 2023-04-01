@@ -43,7 +43,7 @@ router.post("/new", isAuthenticated, async (req, res, next) => {
 // @access  Private
 router.get("/all", async (req, res, next) => {
   try {
-    const allReviews = await Review.find().sort({ createdAt: -1 });
+    const allReviews = await Review.find().sort({ createdAt: -1 }).populate("personRated").populate("personRating");
     res.status(200).json(allReviews);
   } catch (error) {
     next(error);
