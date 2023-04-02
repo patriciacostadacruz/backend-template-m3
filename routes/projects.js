@@ -7,8 +7,53 @@ const { isAuthenticated } = require("../middlewares/jwt");
 // @access  Public
 router.get("/", async (req, res, next) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 }).populate("owner").populate("investors");
-    res.status(200).json(projects);
+    const { search, industry } = req.query;
+    if (search) {
+      const projects = await Project.find(
+        {
+          $or: [
+            { title: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+          ],
+        },
+        { status: { $ne: "closed" } },
+      )
+        .sort({ createdAt: -1 })
+        .populate("owner")
+        .populate("investors");
+        res.status(200).json(projects);
+    }
+    if (industry) {
+      const projects = await Project.find(
+        { industry: { $in: [industry] } },
+        { status: { $ne: "closed" } }
+      )
+        .sort({ createdAt: -1 })
+        .populate("owner")
+        .populate("investors");
+        res.status(200).json(projects);
+    } if (industry && search) {
+      const projects = await Project.find(
+        {
+          $or: [
+            { title: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+          ],
+        },
+        { industry: { $in: [industry] } },
+        { status: { $ne: "closed" } }
+      )
+        .sort({ createdAt: -1 })
+        .populate("owner")
+        .populate("investors");
+      res.status(200).json(projects);
+    } else {
+      const projects = await Project.find({ status: { $ne: "closed" } })
+        .sort({ createdAt: -1 })
+        .populate("owner")
+        .populate("investors");
+        res.status(200).json(projects);
+    }
   } catch (error) {
     next(error);
   }
