@@ -167,15 +167,20 @@ router.put("/edit-picture", isAuthenticated, cloudinary.single("image"), async (
 // @access  Private
 router.get("/:userId", isAuthenticated, async (req, res, next) => {
 	const {userId} = req.params;
+  const myId = req.payload._id;
   try {
-    const otherUser = await User.findById(userId);
-    const userReviews = await Review.find({ personRated: userId })
-      .populate("personRated")
-      .populate("personRating");
-    const userProjects = await Project.find({
-      $or: [{ owner: userId }, { investors: userId }],
-    }).populate("owner").populate("investors");
-		res.status(200).json({otherUser, userReviews, userProjects});
+    if (myId === userId) {
+      res.redirect("/profile");
+    } else {
+      const otherUser = await User.findById(userId);
+      const userReviews = await Review.find({ personRated: userId })
+        .populate("personRated")
+        .populate("personRating");
+      const userProjects = await Project.find({
+        $or: [{ owner: userId }, { investors: userId }],
+      }).populate("owner").populate("investors");
+      res.status(200).json({otherUser, userReviews, userProjects});
+    }
   } catch (error) {
     next(error);
   }
