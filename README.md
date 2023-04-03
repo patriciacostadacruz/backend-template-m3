@@ -314,6 +314,7 @@ const messageSchema = new mongoose.Schema(
 | Edit profile                   | PUT    | /profile/edit               | { firstName, lastName, image, email, role, linkedIn, company, industry, bio, status }           | Private        |
 | Edit password                  | PUT    | /profile/password-edit      | { oldPassword, password, passwordConfirmation }                                                 | Private        |
 | Enable/disable account         | PUT    | /profile/status-update      | { status }                                                                                      | Private        |
+| Edit profile picture           | PUT    | /profile/edit-picture       | { req.file.path }                                                                               | Private        |
 | Get other user profile         | GET    | /profile/:userId            |                                                                                                 | Private        |
 | GET projects                   | GET    | /projects                   |                                                                                                 | Public         |
 | GET one project                | GET    | /projects/:projectId        |                                                                                                 | Public         |
@@ -321,7 +322,8 @@ const messageSchema = new mongoose.Schema(
 | Edit project                   | PUT    | /projects/edit/:projectId   | { title, status, location, description, industry, fundingNeeded, owner }                        | Private        |
 | Delete project                 | DELETE | /projects/delete/:projectId |                                                                                                 | Private        |
 | Sends new review               | POST   | /reviews/new                | { title, rating, comment, personRating, personRated }                                           | Private        |
-| Gets all review                | GET    | /reviews/all                |                                                                                                 | Private        |
+| Gets all reviews               | GET    | /reviews/all                |                                                                                                 | Admin          |
+| Deletes a review               | DELETE | /reviews/:reviewId          |                                                                                                 | Admin          |
 | Gets all conversations         | GET    | /conversations              |                                                                                                 | Private        |
 | Creates a conversation         | POST   | /conversations/:recipientId |                                                                                                 | Private        |
 | Shows messages in conversation | GET    | /messages/:conversationId   |                                                                                                 | Private        |

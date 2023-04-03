@@ -40,7 +40,7 @@ router.post("/new", isAuthenticated, async (req, res, next) => {
 
 // @desc    Gets all reviews
 // @route   GET /reviews/all
-// @access  Private
+// @access  Admin
 router.get("/all", async (req, res, next) => {
   try {
     const allReviews = await Review.find().sort({ createdAt: -1 }).populate("personRated").populate("personRating");
@@ -48,6 +48,19 @@ router.get("/all", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-})
+});
+
+// @desc    Deletes a review
+// @route   DELETE /reviews/:reviewId
+// @access  Admin
+router.delete("/:reviewId", async (req, res, next) => {
+  const {reviewId} = req.params;
+  try {
+    const deletedReview = await Review.findByIdAndDelete(reviewId);
+    res.status(201).json(deletedReview);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

@@ -155,7 +155,7 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
 router.put("/edit-picture", isAuthenticated, cloudinary.single("image"), async (req, res, next) => {
   const { _id: userId } = req.payload;
   try {
-    const updatedProfile = await User.findByIdAndUpdate(userId, {image: req.file.path}, {new: true});
+    await User.findByIdAndUpdate(userId, {image: req.file.path}, {new: true});
     res.status(204).json({ message: "You successfully changed your profile picture."})
   } catch (error) {
     next(error);
