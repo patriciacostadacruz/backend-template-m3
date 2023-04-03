@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 const { isAuthenticated } = require("../middlewares/jwt");
+const cloudinary = require("../config/cloudinary.config");
 
 // @desc    Gets profile view 
 // @route   GET /profile
@@ -37,7 +38,6 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     company,
     industry,
     bio,
-    status,
   } = req.body;
   if (
     !firstName ||
@@ -46,8 +46,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     !role ||
     !company ||
     industry.length < 1 ||
-    !bio ||
-    !status
+    !bio
   ) {
     res
       .status(400)
@@ -145,6 +144,19 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
       await User.findByIdAndUpdate(userId, req.body, {new: true});
       res.status(204).json({ message: "Account status updated successfully." });
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @desc    Change profile pic 
+// @route   PUT /profile/edit-picture
+// @access  Private
+router.put("/edit-picture", isAuthenticated, cloudinary.single("image"), async (req, res, next) => {
+  const { _id: userId } = req.payload;
+  try {
+    const updatedProfile = await User.findByIdAndUpdate(userId, {image: req.file.path}, {new: true});
+    res.status(204).json({ message: "You successfully changed your profile picture."})
   } catch (error) {
     next(error);
   }
