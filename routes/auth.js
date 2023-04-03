@@ -4,15 +4,15 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require('../middlewares/jwt');
+const cloudinary = require("../config/cloudinary.config");
 
 // @desc    SIGN UP new user
 // @route   POST /auth/signup
 // @access  Public
-router.post('/signup', async (req, res, next) => {
+router.post('/signup', cloudinary.single("image"), async (req, res, next) => {
   const {
     firstName,
     lastName,
-    image,
     email,
     password,
     passwordConfirmation,
@@ -55,7 +55,7 @@ router.post('/signup', async (req, res, next) => {
       const newUser = await User.create({
         firstName,
         lastName,
-        image,
+        image: req.file.path,
         email,
         hashedPassword,
         role,
