@@ -8,54 +8,23 @@ const { isAuthenticated } = require("../middlewares/jwt");
 router.get("/", isAuthenticated, async (req, res, next) => {
   try {
     const { industry, search } = req.query;
-    if (industry) {
-      const users = await User.find({
-        $and: [
-          { status: { $ne: "inactive" } },
-          { role: { $ne: "admin" } },
-          { industry: { $in: [industry] } },
-        ],
-      }).sort({ firstName: 1 });
-      res.json({ users });
-    }
+    const searchCriteria = { status: { $ne: "inactive"}, role: { $ne: "admin"} };
     if (search) {
-      const users = await User.find({
-        $and: [
-          { status: { $ne: "inactive" } },
-          { role: { $ne: "admin" } },
-          {
-            $or: [
-              { firstName: { $regex: search, $options: "i" } },
-              { lastName: { $regex: search, $options: "i" } },
-            ],
-          },
-        ],
-      }).sort({ firstName: 1 });
-      res.json({ users });
+      searchCriteria.$or = [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+      ];
     }
-    if (industry && search) {
-      const users = await User.find({
-        $and: [
-          { status: { $ne: "inactive" } },
-          { role: { $ne: "admin" } },
-          { industry: { $in: [industry] } },
-          {
-            $or: [
-              { firstName: { $regex: search, $options: "i" } },
-              { lastName: { $regex: search, $options: "i" } },
-            ],
-          },
-        ],
-      }).sort({ firstName: 1 });
-    } else {
-      const users = await User.find({
-        $and: [{ status: { $ne: "inactive" } }, { role: { $ne: "admin" } }],
-      }).sort({ firstName: 1 });
-      res.json({ users });
+    if (industry) {
+      searchCriteria.industry = { $in: [industry] };
     }
+    const users = await User.find(searchCriteria)
+      .sort({ firstName: 1 });
+    res.status(200).json(users);
   } catch (error) {
     next(error);
   }
 });
+
 
 module.exports = router;
