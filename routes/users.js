@@ -16,7 +16,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
       ];
     }
     if (industry) {
-      searchCriteria.industry = { $in: [industry] };
+      searchCriteria.industry = { $in: industry.split(",") };
     }
     const users = await User.find(searchCriteria)
       .sort({ firstName: 1 });
