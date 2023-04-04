@@ -33,6 +33,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
   const {
     firstName,
     lastName,
+    image,
     email,
     role,
     company,
@@ -43,6 +44,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     !firstName ||
     !lastName ||
     !email ||
+    !image ||
     !role ||
     !company ||
     industry.length < 1 ||
@@ -62,7 +64,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     const payload = {
       firstName: firstName,
       lastName: lastName,
-      image: req.payload.image,
+      image: image,
       email: email,
       hashedPassword: req.payload.hashedPassword,
       role: role,
