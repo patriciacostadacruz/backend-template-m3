@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { isAuthenticated } = require("../middlewares/jwt");
+const { isAuthenticated, isOwnerOrSender } = require("../middlewares/jwt");
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 
