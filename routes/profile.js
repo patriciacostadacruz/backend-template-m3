@@ -183,7 +183,11 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
         });
       return;
     } else {
-      await User.findByIdAndUpdate(userId, req.body, {new: true});
+      await User.findByIdAndUpdate(
+        userId,
+        { status: req.body.status },
+        { new: true }
+      );
       const payload = {
         firstName: req.payloadfirstName,
         lastName: req.payloadlastName,
@@ -195,7 +199,7 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
         company: req.payload.company,
         industry: req.payload.industry,
         bio: req.payload.bio,
-        status: req.body,
+        status: req.body.status,
         _id: req.payload._id,
       };
       // Use the jwt middleware to create the new token
