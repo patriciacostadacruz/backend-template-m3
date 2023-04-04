@@ -59,7 +59,28 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     await User.findByIdAndUpdate(userId, req.body, {
       new: true,
     });
-    res.status(204).json({ message: "Profile updated successfully." });
+    const payload = {
+      firstName: firstName,
+      lastName: lastName,
+      image: req.payload.image,
+      email: email,
+      hashedPassword: req.payload.hashedPassword,
+      role: role,
+      linkedIn: req.payload.linkedIn,
+      company: company,
+      industry: industry,
+      bio: bio,
+      status: req.payload.status,
+      _id: req.payload._id,
+    };
+    // Use the jwt middleware to create the new token
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "30d",
+    });
+    res
+      .status(204)
+      .json({ message: "Profile updated successfully.", authToken });
   } catch (error) {
     next(error);
   }
@@ -116,7 +137,26 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
         new: true,
       }
     );
-    res.status(204).json({ message: "Password updated successfully." });
+    const payload = {
+      firstName: req.payloadfirstName,
+      lastName: req.payloadlastName,
+      image: req.payload.image,
+      email: req.payload.email,
+      hashedPassword: hashedNewPassword,
+      role: req.payload.vrole,
+      linkedIn: req.payload.linkedIn,
+      company: req.payload.company,
+      industry: req.payload.industry,
+      bio: req.payload.bio,
+      status: req.payload.status,
+      _id: req.payload._id,
+    };
+    // Use the jwt middleware to create the new token
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "30d",
+    });
+    res.status(204).json({ message: "Password updated successfully.", authToken });
   } catch (error) {
     next(error);
   }
@@ -142,7 +182,26 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
       return;
     } else {
       await User.findByIdAndUpdate(userId, req.body, {new: true});
-      res.status(204).json({ message: "Account status updated successfully." });
+      const payload = {
+        firstName: req.payloadfirstName,
+        lastName: req.payloadlastName,
+        image: req.payload.image,
+        email: req.payload.email,
+        hashedPassword: req.payload.hashedPassword,
+        role: req.payload.vrole,
+        linkedIn: req.payload.linkedIn,
+        company: req.payload.company,
+        industry: req.payload.industry,
+        bio: req.payload.bio,
+        status: req.body,
+        _id: req.payload._id,
+      };
+      // Use the jwt middleware to create the new token
+      const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: "30d",
+      });
+      res.status(204).json({ message: "Account status updated successfully.", authToken });
     }
   } catch (error) {
     next(error);
