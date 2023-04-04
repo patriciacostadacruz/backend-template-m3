@@ -4,15 +4,16 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require('../middlewares/jwt');
-const cloudinary = require("../config/cloudinary.config");
+// const cloudinary = require("../config/cloudinary.config");
 
 // @desc    SIGN UP new user
 // @route   POST /auth/signup
 // @access  Public
-router.post('/signup', cloudinary.single("image"), async (req, res, next) => {
+router.post('/signup', async (req, res, next) => {
   const {
     firstName,
     lastName,
+    image,
     email,
     password,
     passwordConfirmation,
@@ -22,7 +23,7 @@ router.post('/signup', cloudinary.single("image"), async (req, res, next) => {
     industry,
     bio,
     status } = req.body; 
-  if (!firstName || !lastName || !email || !password || !passwordConfirmation || !role || industry.length < 1 || !company || ! bio || !status) {
+  if (!firstName || !lastName || !image || !email || !password || !passwordConfirmation || !role || industry.length < 1 || !company || ! bio || !status) {
     res.status(400).json({ message: 'Please fill all the fields to sign up.' });
     return;
   }
@@ -55,7 +56,7 @@ router.post('/signup', cloudinary.single("image"), async (req, res, next) => {
       const newUser = await User.create({
         firstName,
         lastName,
-        image: req.file.path,
+        image,
         email,
         hashedPassword,
         role,
