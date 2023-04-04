@@ -16,7 +16,7 @@ router.get("/", async (req, res, next) => {
       ];
     }
     if (industry) {
-      searchCriteria.industry = { $in: [industry] };
+      searchCriteria.industry = { $in: industry.split(",") };
     }
     const projects = await Project.find(searchCriteria)
       .sort({ createdAt: -1 })
@@ -27,6 +27,7 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
 
 // @desc    Creates new project
 // @route   POST /projects
