@@ -29,24 +29,39 @@ router.get("/", isAuthenticated, async (req, res, next) => {
 // @desc    Creates a new conversation
 // @route   POST /conversations/:recipientId
 // @access  Private
+// @desc    Creates a new conversation
+// @route   POST /conversations/:recipientId
+// @access  Private
 router.post("/:recipientId", isAuthenticated, async (req, res, next) => {
   const { recipientId } = req.params;
   const { _id: sender } = req.payload;
   try {
+    const recipient = await User.findById(recipientId);
+    if (!recipient || recipient.status === "inactive") {
+      res.status(400).json({ message: "The recipient is inactive or does not exist." });
+      return;
+    }
+    const senderUser = await User.findById(sender);
+    if (!senderUser || senderUser.status === "inactive") {
+      res.status(400).json({ message: "Your account is inactive or does not exist. If you want to enable your account, please log in." });
+      return;
+    }
     const existingConversation = await Conversation.findOne({
       users: { $all: [sender, recipientId] },
     });
     if (existingConversation) {
       res.status(400).json({ message: "You already have a conversation with this user." });
       return;
+    } else {
+      const newConversation = await Conversation.create({
+        users: [recipientId, sender],
+      });
+      res.status(201).json({ conversation: newConversation });
     }
-    const newConversation = await Conversation.create({
-      users: [ recipientId, sender ],
-    });
-    res.status(201).json({ conversation: newConversation });
   } catch (error) {
     next(error);
   }
 });
+
 
 module.exports = router;
