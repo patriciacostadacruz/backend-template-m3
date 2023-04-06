@@ -258,14 +258,19 @@ router.get("/:userId", isAuthenticated, async (req, res, next) => {
       res.redirect("/profile");
     } else {
       const otherUser = await User.findById(userId);
-      const userReviews = await Review.find({ personRated: userId })
-        .populate("personRated")
-        .populate("personRating");
-      const userProjects = await Project.find({
-        $or: [{ owner: userId }, { investors: userId }],
-      }).populate("owner").populate("investors");
-      res.status(200).json({otherUser, userReviews, userProjects});
-    }
+      if (otherUser.status === "inactive") {
+        res.status(400).json({ message: "You cannot access this user's profile, it has been disabled." });
+        return;
+      } else {
+        const userReviews = await Review.find({ personRated: userId })
+          .populate("personRated")
+          .populate("personRating");
+        const userProjects = await Project.find({
+          $or: [{ owner: userId }, { investors: userId }],
+        }).populate("owner").populate("investors");
+        res.status(200).json({otherUser, userReviews, userProjects});
+        }
+      }
   } catch (error) {
     next(error);
   }
