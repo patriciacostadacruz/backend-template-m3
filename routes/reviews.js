@@ -19,15 +19,15 @@ router.post("/new", isAuthenticated, async (req, res, next) => {
     !comment ||
     !personRating ||
     !personRated ) {
-    res.status(400).json({ message: "Please fill all the fields to add a review." });
+    res.status(400).json({ error: "Please fill all the fields to add a review." });
     return;
   }
   if (rating < 0 || rating > 5) {
-    res.status(400).json({ message: "You must give a rate between 0 and 5."});
+    res.status(400).json({ error: "You must give a rate between 0 and 5."});
     return;
   }
   if (typeof title !== "string" || typeof comment !== "string") {
-    res.status(400).json({ message: "Please add a valid title and comment." });
+    res.status(400).json({ error: "Please add a valid title and comment." });
     return;
   }
   try {

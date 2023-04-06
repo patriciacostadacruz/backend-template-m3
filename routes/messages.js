@@ -11,7 +11,7 @@ router.get("/:conversationId", isAuthenticated, async (req, res, next) => {
   try {
     const conversationInDB = await Conversation.findById(conversationId);
     if (!conversationInDB) {
-      res.status(400).json({ message: "This conversation doesn't exist." });
+      res.status(400).json({ error: "This conversation doesn't exist." });
       return;
     } else {
       const conversation = await Conversation.findById(conversationId)
@@ -38,27 +38,31 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
     if (!isRecipientActive || isRecipientActive.status === "inactive") {
       res
         .status(400)
-        .json({ message: "The recipient is inactive or does not exist." });
+        .json({ error: "The recipient is inactive or does not exist." });
       return;
     }
     const isSenderActive = await User.findById(sender);
     if (!isSenderActive || isSenderActive.status === "inactive") {
       res.status(400).json({
-        message:
+        error:
           "Your account is inactive or does not exist. If you want to enable your account, please log in.",
       });
       return;
     } 
     const conversationInDB = await Conversation.findById(conversationId);
     if (!conversationInDB) {
-      res.status(400).json({ message: "This conversation doesn't exist." });
+      res.status(400).json({ error: "This conversation doesn't exist." });
       return;
     }
     const conversationWithUsers = await Conversation.find({
       users: { $in: { _id: sender } },
     })
     if (!conversationWithUsers) {
-      res.status(400).json({ message: "You are not allowed to send messages in this conversation." });
+      res
+        .status(400)
+        .json({
+          error: "You are not allowed to send messages in this conversation.",
+        });
       return;
     } else {
       const newMessage = await Message.create({ sender, recipient, content });
@@ -67,7 +71,7 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
         { $push: { messages: newMessage._id } },
         { new: true }
       ).populate("messages").populate("users");
-      res.status(201).json({ message: updatedConversation });
+      res.status(201).json({ messageItem: updatedConversation });
     }
   } catch (error) {
     next(error);
@@ -84,22 +88,20 @@ router.put("/:messageId", isAuthenticated, async (req, res, next) => {
   if (!sender || !recipient || !content) {
     res
       .status(400)
-      .json({ message: "Please fill all the fields to update your message." });
+      .json({ error: "Please fill all the fields to update your message." });
     return;
   }
   if (recipient.status === "inactive") {
     res
       .status(400)
-      .json({ message: "The recipient is inactive or does not exist." });
+      .json({ error: "The recipient is inactive or does not exist." });
     return;
   }
   if (sender.status === "inactive") {
-    res
-      .status(400)
-      .json({
-        message:
-          "Your account is inactive or does not exist. If you want to enable your account, please log in.",
-      });
+    res.status(400).json({
+      error:
+        "Your account is inactive or does not exist. If you want to enable your account, please log in.",
+    });
     return;
   }
   try {
@@ -110,7 +112,7 @@ router.put("/:messageId", isAuthenticated, async (req, res, next) => {
         new: true,
       }
     );
-    res.status(201).json({ message: editedMessage });
+    res.status(201).json({ messageItem: editedMessage });
   } catch (error) {
     console.error(error);
   }

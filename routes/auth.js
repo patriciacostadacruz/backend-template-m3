@@ -24,31 +24,38 @@ router.post('/signup', async (req, res, next) => {
     bio,
     status } = req.body; 
   if (!firstName || !lastName || !image || !email || !password || !passwordConfirmation || !role || industry.length < 1 || !company || ! bio || !status) {
-    res.status(400).json({ message: 'Please fill all the fields to sign up.' });
+    res.status(400).json({ error: 'Please fill all the fields to sign up.' });
     return;
   }
   // Use regex to validate the email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
-    res.status(400).json({ message: 'Not a valid email format.' });
+    res.status(400).json({ error: "Not a valid email format." });
     return;
   }
   if (password !== passwordConfirmation) {
     res.status(400).json({
-      message: "Confirmation password doesn't match.",
+      error: "Confirmation password doesn't match.",
     });
     return;
   }
    // Use regex to validate the password format
   const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!passwordRegex.test(password)) {
-    res.status(400).json({ message: 'Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.' });
+    res
+      .status(400)
+      .json({
+        error:
+          "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
+      });
     return;
   }
   try {
     const userInDB = await User.findOne({ email });
     if (userInDB) {
-      res.status(400).json({ message: `User already exists with email ${email}` });
+      res
+        .status(400)
+        .json({ error: `User already exists with email ${email}` });
       return;
     } else {
       const salt = bcrypt.genSaltSync(saltRounds);
@@ -80,13 +87,18 @@ router.post('/login', async (req, res, next) => {
   console.log(req.headers);
   const { email, password } = req.body;
   if (email === "" || password === "") {
-    res.status(400).json({ message: 'Please fill all the fields to login.' });
+    res.status(400).json({ error: "Please fill all the fields to login." });
     return;
   }
   try {
     const userInDB = await User.findOne({ email });
     if (!userInDB) {
-      res.status(404).json({ success: false, message: `No user registered by email ${email}` })
+      res
+        .status(404)
+        .json({
+          success: false,
+          error: `No user registered by email ${email}`,
+        });
       return;
     } else {
       const passwordMatches = bcrypt.compareSync(password, userInDB.hashedPassword);
@@ -114,7 +126,9 @@ router.post('/login', async (req, res, next) => {
         );
         res.status(200).json({ authToken: authToken })
       } else {
-        res.status(401).json({ success: false, message: 'Unable to authenticate user.'})
+        res
+          .status(401)
+          .json({ success: false, error: "Unable to authenticate user." });
       }
     }
   } catch (error) {

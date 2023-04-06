@@ -43,7 +43,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
   } = req.body;
   const { _id: owner } = req.payload;
   if (!title || !status || !location || !description || industry.length < 1 || !fundingNeeded || !owner) {
-    res.status(400).json({ message: "Please fill all the fields to add a new project." });
+    res.status(400).json({ error: "Please fill all the fields to add a new project." });
     return;
   }
   try {
@@ -92,12 +92,12 @@ router.put("/:projectId", isAuthenticated, async (req, res, next) => {
   ) {
     res
       .status(400)
-      .json({ message: "Please fill all the fields to update this project." });
+      .json({ error: "Please fill all the fields to update this project." });
     return;
   }
   try {
-    await Project.findByIdAndUpdate(projectId, req.body, {new: true});
-    res.status(204).json({message: "Project data updated successfully."});
+    const updatedProject = await Project.findByIdAndUpdate(projectId, req.body, {new: true});
+    res.status(204).json(updatedProject);
   } catch (error) {
     next(error);
   }
