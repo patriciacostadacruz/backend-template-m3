@@ -15,7 +15,8 @@ router.get("/", isAuthenticated, async (req, res, next) => {
       .populate("users")
       .populate({
         path: "messages",
-        options: { sort: { createdAt: -1 } },
+        options: { sort: { createdAt: -1 }, limit: 1 },
+        populate: { path: "sender", select: "firstName lastName" },
       })
       .sort({ "messages.createdAt": -1 }); 
 
