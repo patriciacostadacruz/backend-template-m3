@@ -20,7 +20,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
       })
       .sort({ "messages.createdAt": -1 }); 
 
-    res.status(200).json({ conversations });
+    res.status(200).json(conversations);
   } catch (error) {
     next(error);
   }
