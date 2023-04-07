@@ -72,31 +72,18 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
 // @access  Private && Owner
 router.put("/:messageId", isAuthenticated, async (req, res, next) => {
   const { messageId } = req.params;
-  const { recipient, content } = req.body;
+  const { content } = req.body;
   const { _id: sender } = req.payload;
-  if (!sender || !recipient || !content) {
+  if (!sender || !content) {
     res
       .status(400)
       .json({ error: "Please fill all the fields to update your message." });
     return;
   }
-  if (recipient.status === "inactive") {
-    res
-      .status(400)
-      .json({ error: "The recipient is inactive or does not exist." });
-    return;
-  }
-  if (sender.status === "inactive") {
-    res.status(400).json({
-      error:
-        "Your account is inactive or does not exist. If you want to enable your account, please log in.",
-    });
-    return;
-  }
   try {
     const editedMessage = await Message.findByIdAndUpdate(
       messageId,
-      { sender, recipient, content },
+      { content: content },
       {
         new: true,
       }

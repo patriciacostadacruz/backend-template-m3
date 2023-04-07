@@ -42,23 +42,23 @@ router.post("/:recipientId", isAuthenticated, async (req, res, next) => {
   const { recipientId } = req.params;
   const { _id: sender } = req.payload;
   try {
-    const recipient = await User.findById(recipientId);
-    if (!recipient || recipient.status === "inactive") {
-      res
-        .status(400)
-        .json({ error: "The recipient is inactive or does not exist." });
-      return;
-    }
-    const senderUser = await User.findById(sender);
-    if (!senderUser || senderUser.status === "inactive") {
-      res
-        .status(400)
-        .json({
-          error:
-            "Your account is inactive or does not exist. If you want to enable your account, please log in.",
-        });
-      return;
-    }
+    // const recipient = await User.findById(recipientId);
+    // if (!recipient || recipient.status === "inactive") {
+    //   res
+    //     .status(400)
+    //     .json({ error: "The recipient is inactive or does not exist." });
+    //   return;
+    // }
+    // const senderUser = await User.findById(sender);
+    // if (!senderUser || senderUser.status === "inactive") {
+    //   res
+    //     .status(400)
+    //     .json({
+    //       error:
+    //         "Your account is inactive or does not exist. If you want to enable your account, please log in.",
+    //     });
+    //   return;
+    // }
     const existingConversation = await Conversation.findOne({
       users: { $all: [sender, recipientId] },
     });
