@@ -15,7 +15,6 @@ router.post("/new", isAuthenticated, async (req, res, next) => {
   const { _id: personRating } = req.payload;
   if (
     !title ||
-    !rating ||
     !comment ||
     !personRating ||
     !personRated ) {

@@ -13,18 +13,22 @@ router.get("/:conversationId", isAuthenticated, async (req, res, next) => {
     if (!conversationInDB) {
       res.status(400).json({ error: "This conversation doesn't exist." });
       return;
-    } else {
-      const conversation = await Conversation.findById(conversationId)
-        .populate("messages")
-        .populate("users")
-        // recent messages shown last so that the conversation flow has last message at the bottom
-        .sort({ "messages.createdAt": -1 });
-      res.status(200).json({ messages: conversation.messages });
     }
+    const conversation = await Conversation.findById(conversationId)
+      .populate({
+        path: "messages",
+        options: { sort: { createdAt: 1 } },
+        populate: { path: "sender recipient", select: "firstName lastName image" },
+      })
+      .populate("users", "image");
+
+    res.status(200).json({ messages: conversation.messages });
   } catch (error) {
     next(error);
   }
 });
+
+
 
 // @desc    Sends a message in a conversation
 // @route   POST /messages/:conversationId
@@ -34,7 +38,7 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { recipient, content } = req.body;
   const { _id: sender } = req.payload;
   try {
-    const isRecipientActive = await User.findById(recipientId);
+    const isRecipientActive = await User.findById(recipient);
     if (!isRecipientActive || isRecipientActive.status === "inactive") {
       res
         .status(400)

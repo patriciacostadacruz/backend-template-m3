@@ -10,21 +10,27 @@ router.get("/", isAuthenticated, async (req, res, next) => {
   const { _id: userId } = req.payload;
   try {
     const conversations = await Conversation.find({
-      users: { $in: { _id: userId } },
+      users: { $in: [userId] },
     })
-      .populate("users")
+      .populate({
+        path: "users",
+        select: "firstName lastName image",
+      })
       .populate({
         path: "messages",
-        options: { sort: { createdAt: -1 }, limit: 1 },
-        populate: { path: "sender", select: "firstName lastName" },
+        options: { sort: { createdAt: -1 } },
+        populate: {
+          path: "sender recipient",
+          select: "firstName lastName image",
+        },
       })
-      .sort({ "messages.createdAt": -1 }); 
-
+      .sort({ "messages.createdAt": -1 });
     res.status(200).json(conversations);
   } catch (error) {
     next(error);
   }
 });
+
 
 // @desc    Creates a new conversation
 // @route   POST /conversations/:recipientId
@@ -57,13 +63,13 @@ router.post("/:recipientId", isAuthenticated, async (req, res, next) => {
       users: { $all: [sender, recipientId] },
     });
     if (existingConversation) {
-      res.status(400).json(existingConversation);
+      res.json(existingConversation);
       return;
     } else {
       const newConversation = await Conversation.create({
         users: [recipientId, sender],
       });
-      res.status(201).json({ conversation: newConversation });
+      res.status(201).json(newConversation);
     }
   } catch (error) {
     next(error);
