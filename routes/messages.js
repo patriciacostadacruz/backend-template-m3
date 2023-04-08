@@ -101,10 +101,16 @@ router.delete("/:messageId", isAuthenticated, async (req, res, next) => {
   const { messageId } = req.params;
   try {
     const deletedMessage = await Message.findByIdAndDelete(messageId);
+    const conversation = await Conversation.findOneAndUpdate(
+      { messages: messageId },
+      { $pull: { messages: messageId } },
+      { new: true }
+    );
     res.status(201).json(deletedMessage);
   } catch (error) {
     console.error(error);
   }
 });
+
 
 module.exports = router;
