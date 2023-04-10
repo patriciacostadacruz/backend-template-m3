@@ -327,7 +327,7 @@ const messageSchema = new mongoose.Schema(
 | Gets all conversations         | GET    | /conversations              |                                                                                                 | Private        |
 | Creates a conversation         | POST   | /conversations/:recipientId |                                                                                                 | Private        |
 | Shows messages in conversation | GET    | /messages/:conversationId   |                                                                                                 | Private        |
-| Sends message in conversation  | POST   | /messages/:conversationId   | { recipient, content }                                                                          | Private        |
+| Sends message in conversation  | POST   | /messages/:conversationId   | { content }                                                                                     | Private        |
 | Edits a message                | PUT    | /messages/:messageId        |                                                                                                 | Private        |
 | Deletes a message              | DELETE | /messages/:messageId        |                                                                                                 | Private        |
 
