@@ -3,6 +3,34 @@ const { isAuthenticated } = require("../middlewares/jwt");
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 
+// @desc    Get one conversation
+// @route   GET /conversations
+// @access  Private
+router.get("/", isAuthenticated, async (req, res, next) => {
+  const { _id: userId } = req.payload;
+  try {
+    const conversations = await Conversation.find({
+      users: { $in: [userId] },
+    })
+      .populate({
+        path: "users",
+        select: "firstName lastName image",
+      })
+      .populate({
+        path: "messages",
+        options: { sort: { createdAt: -1 } },
+        populate: {
+          path: "sender recipient",
+          select: "firstName lastName image",
+        },
+      })
+      .sort({ "messages.createdAt": -1 });
+    res.status(200).json(conversations);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // @desc    Shows all of user conversations
 // @route   GET /conversations
 // @access  Private
