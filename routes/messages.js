@@ -35,7 +35,7 @@ router.get("/:conversationId", isAuthenticated, async (req, res, next) => {
 // @access  Private
 router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
   const { conversationId } = req.params;
-  const { recipient, content } = req.body;
+  const { content } = req.body;
   const { _id: sender } = req.payload;
   try {
     const conversationInDB = await Conversation.findById(conversationId);
@@ -43,24 +43,34 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
       res.status(400).json({ error: "This conversation doesn't exist." });
       return;
     }
-    const conversationWithUsers = await Conversation.find({
-      users: { $in: { _id: sender } },
-    })
-    if (!conversationWithUsers) {
+    const recipient = conversationInDB.users.find(
+      (user) => String(user._id) !== String(sender)
+    );
+    if (!recipient) {
       res
         .status(400)
-        .json({
-          error: "You are not allowed to send messages in this conversation.",
-        });
+        .json({ error: "This conversation doesn't have a recipient." });
       return;
     } else {
-      const newMessage = await Message.create({ sender, recipient, content });
-      const updatedConversation = await Conversation.findByIdAndUpdate(
-        conversationId,
-        { $push: { messages: newMessage._id } },
-        { new: true }
-      ).populate("messages").populate("users");
-      res.status(201).json({ messageItem: updatedConversation });
+      const conversationWithUsers = await Conversation.find({
+        users: { $in: { _id: sender } },
+      })
+      if (!conversationWithUsers) {
+        res
+          .status(400)
+          .json({
+            error: "You are not allowed to send messages in this conversation.",
+          });
+        return;
+      } else {
+        const newMessage = await Message.create({ sender, recipient: recipient._id, content });
+        const updatedConversation = await Conversation.findByIdAndUpdate(
+          conversationId,
+          { $push: { messages: newMessage._id } },
+          { new: true }
+        ).populate("messages").populate("users");
+        res.status(201).json({ messageItem: updatedConversation });
+      }
     }
   } catch (error) {
     next(error);
