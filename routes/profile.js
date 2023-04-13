@@ -61,7 +61,6 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
       new: true,
     });
-    console.log('Updated user', updatedUser)
     if (updatedUser) {
       const payload = {
         firstName: firstName,
