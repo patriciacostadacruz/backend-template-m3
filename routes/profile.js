@@ -58,31 +58,33 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     return;
   }
   try {
-    await User.findByIdAndUpdate(userId, req.body, {
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
       new: true,
     });
-    const payload = {
-      firstName: firstName,
-      lastName: lastName,
-      image: image,
-      email: email,
-      hashedPassword: req.payload.hashedPassword,
-      role: role,
-      linkedIn: req.payload.linkedIn,
-      company: company,
-      industry: industry,
-      bio: bio,
-      status: req.payload.status,
-      _id: req.payload._id,
-    };
-    // Use the jwt middleware to create the new token
-    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
-      algorithm: "HS256",
-      expiresIn: "30d",
-    });
-    res
-      .status(204)
-      .json({ message: "Profile updated successfully.", authToken });
+    if (updatedUser) {
+      const payload = {
+        firstName: firstName,
+        lastName: lastName,
+        image: image,
+        email: email,
+        hashedPassword: req.payload.hashedPassword,
+        role: role,
+        linkedIn: req.payload.linkedIn,
+        company: company,
+        industry: industry,
+        bio: bio,
+        status: req.payload.status,
+        _id: req.payload._id,
+      };
+      // Use the jwt middleware to create the new token
+      const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: "30d",
+      });
+      res
+        .status(204)
+        .json({ authToken: authToken });
+    }
   } catch (error) {
     next(error);
   }
