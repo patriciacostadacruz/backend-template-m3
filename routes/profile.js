@@ -61,6 +61,7 @@ router.put("/", isAuthenticated, async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
       new: true,
     });
+    console.log('Updated user', updatedUser)
     if (updatedUser) {
       const payload = {
         firstName: firstName,
@@ -76,13 +77,13 @@ router.put("/", isAuthenticated, async (req, res, next) => {
         status: req.payload.status,
         _id: req.payload._id,
       };
-      // Use the jwt middleware to create the new token
+      // Use the jwt middleware to create the new 
       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
         algorithm: "HS256",
         expiresIn: "30d",
       });
       res
-        .status(204)
+        .status(201)
         .json({ authToken: authToken });
     }
   } catch (error) {
@@ -160,7 +161,7 @@ router.put("/password-edit", isAuthenticated, async (req, res, next) => {
       algorithm: "HS256",
       expiresIn: "30d",
     });
-    res.status(204).json({ message: "Password updated successfully.", authToken });
+    res.status(201).json({ message: "Password updated successfully.", authToken });
   } catch (error) {
     next(error);
   }
@@ -210,10 +211,10 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
           algorithm: "HS256",
           expiresIn: "30d",
         });
-        res.status(204).json({ message: "Account enabled successfully.", authToken });
+        res.status(201).json({ message: "Account enabled successfully.", authToken });
       } else {
         res
-          .status(204)
+          .status(201)
           .json({ message: "Account disabled successfully.", });
       }
     }
