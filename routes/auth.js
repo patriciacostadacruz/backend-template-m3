@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require('../middlewares/jwt');
-// const cloudinary = require("../config/cloudinary.config");
 
 // @desc    SIGN UP new user
 // @route   POST /auth/signup

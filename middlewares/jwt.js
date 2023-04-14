@@ -29,31 +29,8 @@ const isAdmin = (req, res, next) => {
   }
 }
 
-const isOwnerOrSender = async (req, res, next) => {
-  try {
-    const { projectId, messageId } = req.params;
-    let ownerOrSender;
-    // Check if deleting a project or a message
-    if (projectId) {
-      const project = await Project.findById(projectId);
-      ownerOrSender = project.owner.equals(req.user._id);
-    } else if (messageId) {
-      const message = await Message.findById(messageId);
-      ownerOrSender = message.sender.equals(req.user._id);
-    }
-    if (!ownerOrSender) {
-      res.status(401).json({ message: "You cannot delete this item." });
-      return;
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
   isAuthenticated,
-  isAdmin,
-  isOwnerOrSender,
+  isAdmin
 };
 

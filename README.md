@@ -314,7 +314,6 @@ const messageSchema = new mongoose.Schema(
 | Edit profile                   | PUT    | /profile/edit               | { firstName, lastName, image, email, role, linkedIn, company, industry, bio, status }           | Private        |
 | Edit password                  | PUT    | /profile/password-edit      | { oldPassword, password, passwordConfirmation }                                                 | Private        |
 | Enable/disable account         | PUT    | /profile/status-update      | { status }                                                                                      | Private        |
-| Edit profile picture           | PUT    | /profile/edit-picture       | { req.file.path }                                                                               | Private        |
 | Get other user profile         | GET    | /profile/:userId            |                                                                                                 | Private        |
 | GET projects                   | GET    | /projects                   |                                                                                                 | Public         |
 | GET one project                | GET    | /projects/:projectId        |                                                                                                 | Public         |
@@ -322,8 +321,6 @@ const messageSchema = new mongoose.Schema(
 | Edit project                   | PUT    | /projects/edit/:projectId   | { title, status, location, description, industry, fundingNeeded, owner }                        | Private        |
 | Delete project                 | DELETE | /projects/delete/:projectId |                                                                                                 | Private        |
 | Sends new review               | POST   | /reviews/new                | { title, rating, comment, personRating, personRated }                                           | Private        |
-| Gets all reviews               | GET    | /reviews/all                |                                                                                                 | Admin          |
-| Deletes a review               | DELETE | /reviews/:reviewId          |                                                                                                 | Admin          |
 | Gets all conversations         | GET    | /conversations              |                                                                                                 | Private        |
 | Creates a conversation         | POST   | /conversations/:recipientId |                                                                                                 | Private        |
 | Shows messages in conversation | GET    | /messages/:conversationId   |                                                                                                 | Private        |
@@ -335,7 +332,7 @@ const messageSchema = new mongoose.Schema(
 
 ## Useful links
 
-- [Presentation slides]()
+- [Presentation slides](https://www.canva.com/design/DAFeylawQWU/-ei28prkA9Y9uMjN0S89og/view?utm_content=DAFeylawQWU&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
 - [Frontend repository](https://github.com/patriciacostadacruz/frontend-template-m3)
 - [Frontend deploy](https://investmate-pro.netlify.app/)
 - [Deployed REST API](https://investmate.fly.dev/)

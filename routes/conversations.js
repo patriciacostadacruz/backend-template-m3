@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const { isAuthenticated } = require("../middlewares/jwt");
 const Conversation = require("../models/Conversation");
-const Message = require("../models/Message");
-
 // @desc    Get one conversation
 // @route   GET /conversations
 // @access  Private
@@ -67,11 +65,6 @@ router.post("/:recipientId", isAuthenticated, async (req, res, next) => {
   const { recipientId } = req.params;
   const { _id: sender } = req.payload;
   try {
-    // const recipient = await User.findById(recipientId);
-    // if (recipient.status !== "active") {
-    //   res.status(400).json({ error: "The recipient is inactive or does not exist." });
-    //   return;
-    // }
     const existingConversation = await Conversation.findOne({
       users: { $all: [sender, recipientId] },
     });

@@ -6,7 +6,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 const { isAuthenticated } = require("../middlewares/jwt");
-// const cloudinary = require("../config/cloudinary.config");
 
 // @desc    Gets profile view 
 // @route   GET /profile
@@ -217,39 +216,6 @@ router.put("/status-update", isAuthenticated, async (req, res, next) => {
           .json({ message: "Account disabled successfully.", });
       }
     }
-  } catch (error) {
-    next(error);
-  }
-});
-
-// @desc    Change profile pic 
-// @route   PUT /profile/edit-picture
-// @access  Private
-router.put("/edit-picture", isAuthenticated, async (req, res, next) => {
-  const { _id: userId } = req.payload;
-  const { image } = req.body;
-  try {
-    await User.findByIdAndUpdate(userId, {image}, {new: true});
-    const payload = {
-      firstName: req.payloadfirstName,
-      lastName: req.payloadlastName,
-      image: req.body,
-      email: req.payload.email,
-      hashedPassword: req.payload.hashedPassword,
-      role: req.payload.vrole,
-      linkedIn: req.payload.linkedIn,
-      company: req.payload.company,
-      industry: req.payload.industry,
-      bio: req.payload.bio,
-      status: req.payload.status,
-      _id: req.payload._id,
-    };
-    // Use the jwt middleware to create the new token
-    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
-      algorithm: "HS256",
-      expiresIn: "30d",
-    });
-    res.status(204).json({ message: "You successfully changed your profile picture.", authToken })
   } catch (error) {
     next(error);
   }

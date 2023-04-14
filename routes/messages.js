@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { isAuthenticated, isOwnerOrSender } = require("../middlewares/jwt");
+const { isAuthenticated } = require("../middlewares/jwt");
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 
@@ -79,7 +79,7 @@ router.post("/:conversationId", isAuthenticated, async (req, res, next) => {
 
 // @desc    Edits message
 // @route   PUT /messages/:messageId
-// @access  Private && Owner
+// @access  Private
 router.put("/:messageId", isAuthenticated, async (req, res, next) => {
   const { messageId } = req.params;
   const { content } = req.body;
@@ -106,7 +106,7 @@ router.put("/:messageId", isAuthenticated, async (req, res, next) => {
 
 // @desc    Deletes a message
 // @route   DELETE /messages/:messageId
-// @access  Private && Owner
+// @access  Private
 router.delete("/:messageId", isAuthenticated, async (req, res, next) => {
   const { messageId } = req.params;
   try {
